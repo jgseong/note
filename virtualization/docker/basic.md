@@ -4,7 +4,7 @@
 # Docker
 
 ## Docker Architecture
-![Docker Architect](/uploads/docker-architect.png "Docker Architect")
+![Docker Architect](/_images/docker-architect.png "Docker Architect")
 
 
 ## CLI
