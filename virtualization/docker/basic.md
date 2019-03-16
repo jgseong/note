@@ -6,6 +6,8 @@
 ## Docker Architecture
 ![Docker Architect](/_images/docker-architect.png "Docker Architect")
 
+## How to install
+* refer to [Get Docker CE for Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 
 ## CLI
 
