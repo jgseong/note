@@ -57,7 +57,13 @@ ls pkg/*.gem | head -n 1 | xargs gem install -l
 jekyll new .    # OR jekyll new <path>
 ```
 
-## Serve jekyll site
+## Install plugin
+```sh
+# install paginate
+gem install jekyll-paginate
+```
+
+## Service jekyll site
 ```sh
 # service from localhost
 # -H [Host] : Host bind to 
