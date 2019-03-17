@@ -32,3 +32,20 @@ gem update jekyll
 # Update Rubygems
 gem update --system
 ```
+
+## Install pre-release
+
+```
+# Check prerequisite
+gem install jekyll --pre
+
+# Install specific version
+gem install jekyll -v '2.0.0.alpha.1'
+
+# Install development version
+git clone git://github.com/jekyll/jekyll.git
+cd jekyll
+script/bootstrap
+bundle exec rake build
+ls pkg/*.gem | head -n 1 | xargs gem install -l
+```
