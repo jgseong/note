@@ -19,7 +19,7 @@ ruby -v
 gem -v
 ```
 
-## Create new site with basic theme(minia)
+## Create new site with basic theme(minima)
 ```sh
 # 현재 위치의 contents로 ./_site에 사이트 생성.
 jekyll build
@@ -67,6 +67,18 @@ jekyll serve --detach
 -H <address> : specify listen address
 ```
 * `_config.yml`에서 설정 가능. 환경설정[https://jekyllrb-ko.github.io/docs/configuration/]
+
+## Directory structure
+* [Official docs for structure](https://jekyllrb-ko.github.io/docs/structure/)
+* Concept
+```
+# markdown, textile, html 등, markup 언어로 작성된 문서들을 하나 또는 여러 겹의 layout으로 포장.
+# URL 구성 방식, 레이아웃에 표시할 데이터, 변환 과정에 포함된 다양한 동작들을 조정.
+# 정적 웹사이트 생성이 텍스트 수정으로 가능.
+```
+
+## Configurations
+* [Official docs for configuration](https://jekyllrb-ko.github.io/docs/configuration/)
 
 ## Help
 ```
