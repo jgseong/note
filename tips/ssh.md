@@ -28,8 +28,8 @@ cat ~/.ssh/jgseong7@naver.com.pub | ssh -t ubuntu@172.16.99.17 'tee -a ~/.ssh/au
 
 # in alternative way, copy the public key file and write it to 'authorized_keys' file by scp and ssh
 scp ~/.ssh/jgseong7@naver.com.pub ubuntu@172.16.99.17:
-ssh -t ubuntu@172.16.99.17 'cat jgseong7@naver.com.pub >> ~/.ssh/authorized_keys'
-ssh -t ubuntu@172.16.99.17 'rm jgseong7@naver.com.pub'
+ssh ubuntu@172.16.99.17 'cat jgseong7@naver.com.pub >> ~/.ssh/authorized_keys'
+ssh ubuntu@172.16.99.17 'rm jgseong7@naver.com.pub'
 ```
 ## Check `sshd_config` and restart `sshd`
 ```bash
