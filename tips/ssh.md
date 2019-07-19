@@ -34,7 +34,7 @@ ssh ubuntu@172.16.99.17 'rm jgseong7@naver.com.pub'
 ## Check `sshd_config` and restart `sshd`
 ```bash
 # '/etc/ssh/sshd_config' in default on ubuntu 16.04 LTS
-cat /etc/ssh/sshd_config | grep -E 'PubkeyAuthentication|RSAAuthentication'
+cat /etc/ssh/sshd_config | grep -E 'PubkeyAuthentication`|RSAAuthentication'
 # check PubkeyAuthentication yes
 # check RSAAuthentication yes  # for RSA public key
 
@@ -52,17 +52,4 @@ ssh -i ~/.ssh/jgseong7@naver.com ubuntu@172.16.99.17
 
 # identity file could be specifable in `ssh_config`
 # check 'IdentityFile'
-cat /etc/ssh/ssh_config | grep IdentityFile
-# if no 'IdentityFile' graped, insert configuration.
-echo 'IdentityFile ~/.ssh/jgseong7@naver.com' >> /etc/ssh/ssh_config
-# to append another identity file.
-echo 'IdentityFile ~/.ssh/id_admin_ubuntu1_vultr' >> /etc/ssh/ssh_config
-echo 'IdentityFile ~/.ssh/id_jgseong_ubuntu2_vultr' >> /etc/ssh/ssh_config
-```
-* Check identity file in 'ssh_config'
-```
-$ cat /etc/ssh/ssh_config | grep IdentityFile
-IdentityFile ~/.ssh/jgseong7@naver.com
-IdentityFile ~/.ssh/id_admin_ubuntu1_vultr
-IdentityFile ~/.ssh/id_jgseong_ubuntu2_vultr
-```
+cat .ssh/config # refter to `man ssh`
