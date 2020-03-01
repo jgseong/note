@@ -1,51 +1,36 @@
 #!/bin/sh
 
-makeDockerfile()
-{
-  Dockerfile=./Dockerfile
-  BASEIMG="alpine:3.11"
-  IMGTAG="$1"
-
-  if ! [ -f "${Dockerfile}" ]; then
-    cat > ${Dockerfile} <<EOF
-    FROM ${BASEIMG}
-    RUN apk add --no-cache python python-dev py-pip build-base openssh git-fast-import
-    RUN pip install virtualenv
-    RUN pip install mkdocs
-    RUN rm -rf /var/cache/apk/*
-EOF
-
-    if [ -f ./config ]; then
-      cat >> ${Dockerfile} <<EOF
-      COPY config /root/.ssh/config
-      RUN chmod 0400 /root/.ssh/config
-EOF
-    fi
-    
-    if [ -f ./priv.key ]; then
-      cat >> ${Dockerfile} <<EOF
-      COPY priv.key /root/.ssh/priv.key
-      RUN chmod 0400 /root/.ssh/priv.key
-EOF
-    fi
-
-    cat >> ${Dockerfile} <<EOF
-    WORKDIR /docs
-    CMD ["mkdocs", "serve"]
-EOF
-  fi
-  docker build --tag "${IMGTAG}:latest" .
-}
-
 # main
 IMG=mkdocs
+TAG=latest
+
+if ! [ -f ./config ]; then
+  echo "No such ./config"
+  exit 1
+fi
+
+if ! [ -f ./priv.key ]; then
+  echo "No such ./priv.key"
+  exit 1
+fi
+
+case "$1" in 
+  build|gh-deploy)
+    ;;
+  *)
+    echo "Not support command. Only 'build' or 'gh-deploy'"
+    exit 1
+    ;;
+esac
 
 CNT=`docker images "${IMG}" -q | wc -l`
 if [ ${CNT} -eq 0 ]; then
-  makeDockerfile ${IMG}
+  if ! [ -f ./Dockerfile ]; then
+    echo "No such ./Dockerfile"
+    exit 1
+  fi
+  docker build -u ${USER} -t ${IMG}:${TAG} .
 fi
 
-docker run --rm -it -v ${PWD}:/docs ${IMG} mkdocs build
-
-docker run --rm -it -v ${PWD}:/docs ${IMG} mkdocs gh-deploy
+docker run --rm -it -u ${USER} -v ${PWD}:/home/${USER}/docs ${IMG}:${TAG} mkdocs "$1"
 

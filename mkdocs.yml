@@ -1,6 +1,19 @@
 site_name: Jgseong's Note
 
-pages:
-  - Home: index.md
+nav:
+  - Home: 'index.md'
+  - 'APIs':
+    - 'C': 'api/c.md'
+  - 'Tools':
+    - 'tmux': 'tools/tmux.md'
+  - 'Virt.':
+    - 'Docker': 'virtualization/docker.md'
+    - 'Qemu': 'virtualization/qemu.md'
+  - 'Libs':
+    - 'Openssl-cli': 'openssl/cli.md'
+    - 'Openssl-api': 'openssl/api.md'
+  - 'Tips': 
+    - 'Linux': 'tips/linux.md'
 
 theme: readthedocs
+
