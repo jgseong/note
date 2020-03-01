@@ -7,16 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
-  <link rel="shortcut icon" href="./img/favicon.ico">
-  <title>Jgseong's Note</title>
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Mount errors - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
-  <script src="./js/jquery-2.1.1.min.js" defer></script>
-  <script src="./js/modernizr-2.8.3.min.js" defer></script>
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Mount errors";
+    var mkdocs_page_input_path = "test/errors/mount-errors.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
@@ -29,9 +36,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="./." class="icon icon-home"> Jgseong's Note</a>
+        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
@@ -43,12 +50,12 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="./.">Home</a>
+    <a class="" href="../../..">Home</a>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <a class="" href="./devnote/index.md">Test</a>
+    <a class="" href="../../../devnote/index.md">Test</a>
 	    </li>
           
         </ul>
@@ -61,7 +68,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="./.">Jgseong's Note</a>
+        <a href="../../..">Jgseong's Note</a>
       </nav>
 
       
@@ -69,9 +76,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="./.">Docs</a> &raquo;</li>
+    <li><a href="../../..">Docs</a> &raquo;</li>
     
+      
     
+    <li>Mount errors</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -81,19 +90,46 @@
           <div role="main">
             <div class="section">
               
+                <!-- TITLE: Mount Errors -->
 
-  <h1 id="search">Search Results</h1>
+<!-- SUBTITLE: mount 관련 에러 해결 방법 정리 (For Linux) -->
 
-  <form id="content_search" action="search.html">
-    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-    <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off" autofocus title="Type search term here">
-  </form>
+<h1 id="ntfs-mount-error">NTFS mount error</h1>
+<ul>
+<li><code>the disk contains an unclean file system (0 0) ...</code> 하면서, 어쩌고 저쩌고 에러 날때</li>
+<li>듀얼 부팅 또는 MBR을 잘못 건들였을 때, 나타나는 증상 </li>
+<li>
+<p>내 환경 : Grub2(sdb1) - Windows10(sdb2), Linux Mint 18.3(sdc*), NTFS-HDD(sda1)</p>
+</li>
+<li>
+<p>보통 ntfsfix로 해결 가능</p>
+</li>
+<li>ntfs HDD dev 파일이 /dev/sda1인 경우</li>
+</ul>
+<pre><code class="bash">sudo ntfsfix /dev/sda1
+</code></pre>
 
-  <div id="mkdocs-search-results" class="search-results">
-    Searching...
-  </div>
-
-
+<ul>
+<li>output example</li>
+</ul>
+<pre><code class="bash">$ sudo ntfsfix /dev/sda1 
+Mounting volume... The disk contains an unclean file system (0, 0).
+Metadata kept in Windows cache, refused to mount.
+FAILED
+Attempting to correct errors... 
+Processing $MFT and $MFTMirr...
+Reading $MFT... OK
+Reading $MFTMirr... OK
+Comparing $MFTMirr to $MFT... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Setting required flags on partition... OK
+Going to empty the journal ($LogFile)... OK
+Checking the alternate boot sector... OK
+NTFS volume version is 3.1.
+NTFS partition /dev/sda1 was processed successfully.
+$
+</code></pre>
+              
             </div>
           </div>
           <footer>
@@ -123,9 +159,9 @@
       
     </span>
 </div>
-    <script>var base_url = '.';</script>
-    <script src="./js/theme.js" defer></script>
-      <script src="./search/main.js" defer></script>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
 
 </body>
 </html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>Data type - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Data type";
+    var mkdocs_page_input_path = "test/api/c/data-type.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../../devnote/index.md">Test</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Data type</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TITLE: Data Type -->
+
+<!-- SUBTITLE: Data types for C -->
+
+<h1 id="primitive-system-data-type">Primitive System Data Type</h1>
+<ul>
+<li>소프트웨어의 이식성을 위해 사용자 정의 자료형(정수 자료형)을 사용.</li>
+<li>플랫폼(platform)마다 자료형(data type)의 크기가 다를 수있음.
+  <strong>e.g.</strong> C언어의 기본 자료형 중 <code>long</code> 타입은 32-bit Linux gcc 컴파일러에서 <strong>4 bytes</strong>(32-bit), 64-bit Linux gcc 컴파일러에서 <strong>8 bytes</strong>(64-bit).</li>
+<li>정수 비트 길이와 바이트 길이가 문제가 될 때, <code>char</code> 또는 <code>short</code>, <code>int</code>, <code>long</code>, <code>long long</code>과 같은 자료형 대신 고정 길이 자료형을 이용. [1]</li>
+<li><strong>ISO</strong>가 개발한 C 언어 표준 <strong>ISO/IEC 9899</strong>에서는 <code>char</code> 또는 <code>short</code>, <code>int</code>, <code>long</code>, <code>long long</code>같은 자료형의 길이(비트 길이)에 대한 처리 시스템마다 정의하는 것이 허용되며, 이것은 이식성 문제를 일으킴. [1]</li>
+<li>
+<p>1999년에 개정된 <strong>ISO/IEC 9899: 1999</strong>에서도 이 문제의 잠재적인 원인은 해결되지 않았지만, 비트 길이를 고유하게 정의한 자료형이 추가. 이 형식은 <code>stdint.h</code>에 정의. [1]</p>
+</li>
+<li>
+<p><code># include &lt;stdint.h&gt;</code></p>
+</li>
+<li>[u]intN_t : 요구되는 bit의 길이를 N에 명시하여 사용하며, u는 unsigned.</li>
+<li>이러한 방식은 C99 표준에 정의.</li>
+<li>Exact-width integer types.</li>
+<li>Integer types having exactly the specified width</li>
+</ul>
+<pre><code class="c">typedef singed char int8_t;                // signed 8-bit integer
+typedef unsigned char uint8_t;             // unsigned 8-bit integer
+typedef singed int int16_t;                // signed 16-bit integer
+typedef unsigned int uint16_t;             // unsigned 16-bit integer
+typedef singed long int int32_t;           // signed 32-bit integer
+typedef unsigned long int uint32_t;        // unsigned 32-bit integer
+typedef singed long long int int64_t;      // signed 64-bit integer
+typedef unsigned long long int  uint64_t;  // unsigned 64-bit integer
+</code></pre>
+
+<h1 id="reference">Reference</h1>
+<p>[1] http://blog.daum.net/_blog/BlogTypeView.do?blogid=09ehJ&amp;articleno=18230429&amp;categoryId=884391&amp;regdt=20100414204400 
+[2] http://mgoons.tistory.com/4</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+
+</body>
+</html>

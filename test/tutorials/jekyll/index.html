@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Jekyll - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Jekyll";
+    var mkdocs_page_input_path = "test/tutorials/jekyll.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../devnote/index.md">Test</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Jekyll</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="jekyll">Jekyll</h1>
+<ul>
+<li>refer to <a href="https://jekyllrb-ko.github.io/docs/installation/">Jekyll Official - Installation</a></li>
+</ul>
+<h2 id="install-on-ubuntu-16">Install on Ubuntu 16</h2>
+<pre><code class="sh"># Install ruby
+sudo apt-get install ruby ruby-dev build-essential
+
+# Set up environments
+echo '# Install Ruby Gems to ~/gems' &gt;&gt; ~/.bashrc
+echo 'export GEM_HOME=$HOME/gems' &gt;&gt; ~/.bashrc
+echo 'export PATH=$HOME/gems/bin:$PATH' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+
+# Install jekyll
+gem install jekyll bundler
+</code></pre>
+
+<h2 id="checkupdate-jekyll-vertion">Check/Update jekyll vertion</h2>
+<pre><code class="sh"># Check version
+jekyll --version
+gem list jekyll
+
+# Update jekyll
+bundle update jekyll
+
+# Update without bundle
+gem update jekyll
+
+# Update Rubygems
+gem update --system
+</code></pre>
+
+<h2 id="install-pre-release">Install pre-release</h2>
+<pre><code># Check prerequisite
+gem install jekyll --pre
+
+# Install specific version
+gem install jekyll -v '2.0.0.alpha.1'
+
+# Install development version
+git clone git://github.com/jekyll/jekyll.git
+cd jekyll
+script/bootstrap
+bundle exec rake build
+ls pkg/*.gem | head -n 1 | xargs gem install -l
+</code></pre>
+
+<h2 id="crate-new-jekyll-site">Crate new jekyll site</h2>
+<pre><code class="sh"># mkdir jekyllSite
+# cd jekyllSite
+jekyll new .    # OR jekyll new &lt;path&gt;
+</code></pre>
+
+<h2 id="install-plugin">Install plugin</h2>
+<pre><code class="sh"># install paginate
+gem install jekyll-paginate
+</code></pre>
+
+<h2 id="service-jekyll-site">Service jekyll site</h2>
+<pre><code class="sh"># service from localhost
+# -H [Host] : Host bind to 
+# jekyll serve : localhost service
+jekyll serve -H 0.0.0.0
+</code></pre>
+
+<ul>
+<li>Example output</li>
+</ul>
+<pre><code class="sh">root@pretest:~/jekyllTutorial# jekyll serve -H 0.0.0.0
+Configuration file: /root/jekyllTutorial/_config.yml
+            Source: /root/jekyllTutorial
+       Destination: /root/jekyllTutorial/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating...
+       Jekyll Feed: Generating feed for posts
+                    done in 0.35 seconds.
+ Auto-regeneration: enabled for '/root/jekyllTutorial'
+    Server address: http://0.0.0.0:4000/
+  Server running... press ctrl-c to stop.
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+
+</body>
+</html>

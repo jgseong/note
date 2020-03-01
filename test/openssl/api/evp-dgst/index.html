@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>Evp dgst - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Evp dgst";
+    var mkdocs_page_input_path = "test/openssl/api/evp-dgst.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../../devnote/index.md">Test</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Evp dgst</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TITLE: Message Digest with EVP -->
+
+<!-- SUBTITLE: A quick summary of API to use message digest with EVP -->
+
+<h1 id="message-digest">Message Digest?</h1>
+<ul>
+<li>임의의 길이를 가지는 메시지에 대응되는 일정한 길이의 코드.</li>
+<li>해시(hash), 메시지 다이제트(message digest)</li>
+</ul>
+<h1 id="message-digest-function">Message Digest Function</h1>
+<ul>
+<li>해시 함수(hash function)</li>
+<li>임의의 길이를 가지는 메시지의 해시를 출력하는 함수.</li>
+<li>key를 사용하지 않음.</li>
+<li>1비트의 변화에도 완전히 다른 해시를 출력.</li>
+<li>복호화가 불가능한  one-way function.</li>
+<li>대표적으로 MD5, SHA1, SHA2 암호학적 해시 알고리즘를 사용.</li>
+</ul>
+<h1 id="hmachash-based-message-authentication-code">HMAC(Hash-based Message Authentication Code)</h1>
+<ul>
+<li>MAC 생성에 암호학적 해시 알고리즘을 사용.</li>
+<li>MAC를 생성/검증하기 위해 대칭키(symmetric key)를 사용.</li>
+</ul>
+<h1 id="evp_md-api">EVP_MD API</h1>
+<ul>
+<li>hash를 출력.</li>
+<li>CTX와 EVP 사용.</li>
+<li>Init, Update, Final 순으로 수행.</li>
+<li><code>man EVP_MD_CTX_init</code></li>
+</ul>
+<pre><code class="c">#include &lt;openssl/evp.h&gt;
+
+struct env_md_ctx_st {
+     const EVP_MD *digest;
+     ENGINE *engine;             /* functional reference if 'digest' is ENGINE-provided */
+     unsigned long flags;
+     void *md_data;
+    /* Public key context for sign/verify */
+    EVP_PKEY_CTX *pctx;
+    /* Update function: usually copied from EVP_MD */
+    int (*update) (EVP_MD_CTX *ctx, const void *data, size_t count);
+} /* EVP_MD_CTX */ ;
+</code></pre>
+
+<h2 id="evp_md_ctx_init">EVP_MD_CTX_init</h2>
+<pre><code class="c">void EVP_MD_CTX_init(EVP_MD_CTX *ctx);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : message digest context</li>
+<li><code>ctx</code>를 초기화</li>
+</ul>
+<h2 id="evp_md_ctx_create">EVP_MD_CTX_create</h2>
+<pre><code class="c">EVP_MD_CTX *EVP_MD_CTX_create(void);
+</code></pre>
+
+<ul>
+<li><code>EVP_MD_CTX</code> 동적할당</li>
+</ul>
+<h2 id="evp_digestinit">EVP_DigestInit</h2>
+<pre><code class="c">int EVP_DigestInit(EVP_MD_CTX *ctx, const EVP_MD *type);
+int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, ENGINE *impl);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : 초기화된 message digest context</li>
+<li><code>type</code> : 해시 알고리즘, 아래 함수의 리턴값.</li>
+</ul>
+<pre><code class="c">    const EVP_MD *EVP_md_null(void);
+    const EVP_MD *EVP_md2(void);
+    const EVP_MD *EVP_md5(void);
+    const EVP_MD *EVP_sha(void);
+    const EVP_MD *EVP_sha1(void);
+    const EVP_MD *EVP_dss(void);
+    const EVP_MD *EVP_dss1(void);
+    const EVP_MD *EVP_mdc2(void);
+    const EVP_MD *EVP_ripemd160(void);
+    const EVP_MD *EVP_sha224(void);
+    const EVP_MD *EVP_sha256(void);
+    const EVP_MD *EVP_sha384(void);
+    const EVP_MD *EVP_sha512(void);
+</code></pre>
+
+<ul>
+<li><code>impl</code> : <code>type</code>에서 사용되는 엔진, 기본값은 NULL.</li>
+<li>message digest context 설정, 해시하기 위한 초기설정.</li>
+<li>성공시 1, 실패시 0 리턴.</li>
+</ul>
+<h2 id="evp_digestupdate">EVP_DigestUpdate</h2>
+<pre><code class="c">int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d, size_t cnt);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : 초기설정이 완료된 message digest context</li>
+<li><code>d</code> : 해시할 메시지</li>
+<li><code>cnt</code> : <code>d</code>의 길이.</li>
+<li>메시지를 입력으로 해시 알고리즘을 수행한다.</li>
+<li>성공시 1, 실패시 0 리턴.</li>
+</ul>
+<h2 id="evp_digestfinal">EVP_DigestFinal</h2>
+<pre><code class="c">int EVP_DigestFinal(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *s);
+int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *s);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : Update가 끝난 message digest context.</li>
+<li><code>md</code> : 해시가 출력될 버퍼, 충분한 버퍼를 가져야함.</li>
+<li><code>s</code> : 출력되는 해시의 길이를 저장, NULL이 되면 안됨.</li>
+<li>계산된 해시를 <code>md</code>에 저장.</li>
+<li><code>EVP_DigestFinal_ex()</code>는 자동으로 ctx를 clean up.</li>
+<li>성공시 1, 실패시 0 리턴.</li>
+</ul>
+<h2 id="evp_md_ctx_cleanup">EVP_MD_CTX_cleanup</h2>
+<pre><code class="c">int EVP_MD_CTX_cleanup(EVP_MD_CTX *ctx);
+</code></pre>
+
+<ul>
+<li><code>ctx</code>를 clean up.</li>
+</ul>
+<h2 id="evp_md_ctx_destroy">EVP_MD_CTX_destroy</h2>
+<pre><code class="c">void EVP_MD_CTX_destroy(EVP_MD_CTX *ctx);
+</code></pre>
+
+<ul>
+<li><code>ctx</code>를 clean up.</li>
+<li><code>EVP_MD_CTX_create()</code>로 할당된 <code>ctx</code>를 해재.</li>
+</ul>
+<h2 id="evp_md_ctx_copy">EVP_MD_CTX_copy</h2>
+<pre><code class="c">int EVP_MD_CTX_copy(EVP_MD_CTX *out,EVP_MD_CTX *in);
+int EVP_MD_CTX_copy_ex(EVP_MD_CTX *out,const EVP_MD_CTX *in);
+</code></pre>
+
+<ul>
+<li><code>in</code> : source message digest context.</li>
+<li><code>out</code> : destination message digest context. (초기화된)</li>
+<li><code>ctx</code>를 copy.</li>
+<li>보통 큰 메시지에서 일부분만 다른 경우 사용.</li>
+<li><code>EVP_MD_CTX_copy_ex()</code>는 자동으로 <code>out</code>을 초기화.</li>
+<li>성공시 1, 실패시 0 리턴.</li>
+</ul>
+<h2 id="exp_max_md_size">EXP_MAX_MD_SIZE</h2>
+<pre><code class="c">#define EVP_MAX_MD_SIZE 64     /* SHA512 */
+</code></pre>
+
+<ul>
+<li>OpenSSL에서 정의한 message digest의 최대 크기(in bytes)</li>
+</ul>
+<h2 id="evp_md_type">EVP_MD_type</h2>
+<ul>
+<li>EVP_MD에 해당하는 알고리즘의 정보를 리턴하는 함수</li>
+</ul>
+<pre><code class="c">int EVP_MD_type(const EVP_MD *md);
+</code></pre>
+
+<ul>
+<li><code>EVP_MD</code> 구조체에 해당하는 NID를 리턴.</li>
+<li>실패시 <code>NID_undef</code> 리턴.
+  e.g. <code>EVP_MD_type(EVP_sha1());</code> 는 <code>NID_sha1</code>를 리턴.</li>
+</ul>
+<h2 id="evp_md_pkey_type">EVP_MD_pkey_type</h2>
+<pre><code class="c">int EVP_MD_pkey_type(const EVP_MD *md);
+</code></pre>
+
+<ul>
+<li>공개키 서명 알고리즘과 관련된 해시 함수의 NID를 리턴.</li>
+<li>실패시 <code>NID_undef</code> 리턴.
+  e.g. RSA방식의 키를 사용한 경우, <code>NID_sha1WithRSAEncrption</code>을 리턴.</li>
+</ul>
+<h2 id="evp_md_size">EVP_MD_size</h2>
+<pre><code class="c">int EVP_MD_size(const EVP_MD *md);
+</code></pre>
+
+<ul>
+<li><code>EVP_MD</code>에 해당하는 알고리즘이 출력하는 해시의 길이를 리턴.(바이트)</li>
+</ul>
+<h2 id="evp_md_block_size">EVP_MD_block_size</h2>
+<pre><code class="c">int EVP_MD_block_size(const EVP_MD *md);
+</code></pre>
+
+<ul>
+<li><code>EVP_MD</code>에 해당하는 알고리즘이 사용하는 메시지 블럭 길이를 리턴.</li>
+</ul>
+<h2 id="useful-macro-of-evp_md_ctx">Useful macro of EVP_MD_CTX</h2>
+<h3 id="ctx"><code>ctx</code>에 설정된 정보를 리턴하는 함수 및 매크로</h3>
+<p>```c
+const EVP_MD <em>EVP_MD_CTX_md(const EVP_MD_CTX </em>ctx);</p>
+<h1 id="define-evp_md_ctx_sizee-evp_md_sizeevp_md_ctx_mde">define EVP_MD_CTX_size(e)             EVP_MD_size(EVP_MD_CTX_md(e))</h1>
+<h1 id="define-evp_md_ctx_block_sizee-evp_md_block_sizee-digest">define EVP_MD_CTX_block_size(e)       EVP_MD_block_size((e)-&gt;digest)</h1>
+<h1 id="define-evp_md_ctx_typee-evp_md_typee-digest">define EVP_MD_CTX_type(e)             EVP_MD_type((e)-&gt;digest)</h1>
+<pre><code>
+### EVP_get_digestbyname
+```c
+const EVP_MD *EVP_get_digestbyname(const char *name);
+</code></pre>
+
+<ul>
+<li><code>name</code> : 해시 알고리즘 이름(문자열), <code>openssl list-message-digest-algorithms</code> 참고</li>
+<li><code>name</code>에 해당하는 <code>EVP_MD</code> 구조체 포인터를 리턴, 실패시 <code>NULL</code> 리턴.</li>
+<li>함수 수행 전에 <code>OpenSSL_add_all_digests()</code>이 호출되어야 함.</li>
+</ul>
+<h3 id="evp_get_digestbynid">EVP_get_digestbynid</h3>
+<pre><code class="c">#define EVP_get_digestbynid(a) EVP_get_digestbyname(OBJ_nid2sn(a))
+</code></pre>
+
+<ul>
+<li>digest NID에 해당하는 <code>EVP_MD*</code> 리턴</li>
+</ul>
+<h3 id="evp_get_digestbyobj">EVP_get_digestbyobj</h3>
+<pre><code class="c">#define EVP_get_digestbyobj(a) EVP_get_digestbynid(OBJ_obj2nid(a))
+</code></pre>
+
+<ul>
+<li><code>ASN1_OBJECT</code> 구조체에 해당하는 <code>EVP_MD*</code> 리턴</li>
+</ul>
+<h1 id="examples">Examples</h1>
+<h2 id="mdc"><code>md.c</code></h2>
+<pre><code class="c">Example - Message digest for file
+/* md.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;openssl/evp.h&gt;
+
+#define eprintfExit(x, ...) { fprintf(stderr, __VA_ARGS__); exit(x); }
+#define eprintfReturn(x, ...) { fprintf(stderr, __VA_ARGS__); return (x); }
+
+void printhex(unsigned char *b, int bLen)
+{
+    int i;
+    printf(&quot;%02X&quot;,b[0]);
+    for(i=1; i&lt;bLen; i++)
+        printf(&quot;:%02X&quot;, b[i]);
+    printf(&quot;\n&quot;);
+}
+
+int make_md(const char *mdname, FILE *fp, unsigned char *md, int *mdLen)
+{
+    EVP_MD_CTX mctx;
+    const EVP_MD *evpmd;
+    unsigned char in[BUFSIZ];
+    int inLen;
+
+    OpenSSL_add_all_digests();
+    if(!(evpmd=EVP_get_digestbyname(mdname)))
+        eprintfReturn(0, &quot;Unknown digest name.\n&quot;);
+
+    EVP_MD_CTX_init(&amp;mctx);
+    EVP_DigestInit_ex(&amp;mctx, evpmd, NULL);
+
+    while((inLen=fread(in, 1, sizeof(in), fp))&gt;0)
+        EVP_DigestUpdate(&amp;mctx, in, inLen);
+
+    EVP_DigestFinal_ex(&amp;mctx, md, mdLen);
+    //EVP_MD_CTX_cleanup(&amp;mctx);
+
+    return 1;
+}
+
+void main(int argc, char **argv)
+{
+    unsigned char md[EVP_MAX_MD_SIZE];
+    int mdLen;
+    FILE *fp;
+
+    if(argc!=3)
+        eprintfExit(1, &quot;Usage: %s &lt;digest name&gt; &lt;inFile&gt;.\n&quot;, argv[0]);
+
+    if((fp=fopen(argv[2], &quot;rb&quot;))==NULL)
+        eprintfExit(2, &quot;open error %s&quot;, argv[2]);
+
+    if(!make_md(argv[1], fp, md, &amp;mdLen))
+        exit(3);
+
+    printf(&quot;Hash=&quot;);
+    printhex(md, mdLen);
+
+    fclose(fp);
+}
+</code></pre>
+
+<h2 id="_1">실행 결과</h2>
+<pre><code class="bash">$ gcc md.c -lcrypto
+$ ./a.out sha1 md.c 
+Hash=64:7C:E6:5B:5C:EA:FA:39:20:EE:62:60:56:97:7B:A8:FB:16:4F:8F
+$ 
+</code></pre>
+
+<h1 id="hmac-api">HMAC API</h1>
+<ul>
+<li>EVP_MD와 유사함.</li>
+<li>Init 과정에서 키 값을 설정하는 것만 EVP_MD와 다름.</li>
+<li><code>man hmac</code></li>
+</ul>
+<h2 id="hmac">HMAC()</h2>
+<pre><code class="c">#include &lt;openssl/hmac.h&gt;
+
+unsigned char *HMAC(const EVP_MD *evp_md, const void *key,
+              int key_len, const unsigned char *d, int n,
+              unsigned char *md, unsigned int *md_len);
+</code></pre>
+
+<ul>
+<li><code>n</code> 길이의 메시지 <code>d</code>에 대한 HMAC을 생성.</li>
+<li>성공 시 출력된 HMAC의 포인터(<code>md</code>가 <code>NULL</code>이면 내부의 <code>static</code> 문자열의 주소 리턴), 실패시 <code>NULL</code> 리턴.</li>
+<li><code>md_len</code>은 <code>NULL</code>이면 안됨.</li>
+<li><code>evp_md</code> : 해시 알고리즘.</li>
+<li><code>key</code> : 키(key) 값. (in binary)</li>
+<li><code>key_len</code> : <code>key</code>의 길이, HMAC의 키 길이는 해시 알고리즘에 따라 달라짐.</li>
+<li><code>md</code> : HMAC을 저장.</li>
+<li><code>md_len</code> : 출력된 <code>md</code>의 길이를 저장.</li>
+</ul>
+<h2 id="initialize">Initialize</h2>
+<h3 id="hmac_ctx_init">HMAC_CTX_init()</h3>
+<pre><code class="c">void HMAC_CTX_init(HMAC_CTX *ctx);
+</code></pre>
+
+<ul>
+<li>hmac context를 초기화.</li>
+</ul>
+<h3 id="hmac_init">HMAC_Init()</h3>
+<pre><code class="c">int HMAC_Init(HMAC_CTX *ctx, const void *key, int key_len, const EVP_MD *md);
+int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int key_len, const EVP_MD *md, ENGINE *impl);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : 초기화된 hmac context.</li>
+<li><code>key</code> : 키 값. (in binary)</li>
+<li><code>key_len</code> : <code>key</code>의 길이.</li>
+<li><code>md</code> : 해시 알고리즘.</li>
+<li><code>HMAC_Init_ex()</code>은 해시 알고리즘에 따라 <strong>ENGINE</strong>을 추가 구성 가능.</li>
+</ul>
+<h3 id="hmac_update">HMAC_Update()</h3>
+<pre><code class="c">int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, int len);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : 초기설정된 hmac context.</li>
+<li><code>data</code> : message.</li>
+<li><code>len</code> : <code>data</code>의 길이.</li>
+<li>설정된 키와 해시 알고리즘으로 HMAC을 계산.</li>
+</ul>
+<h3 id="hmac_final">HMAC_Final()</h3>
+<pre><code class="c">int HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
+</code></pre>
+
+<ul>
+<li><code>ctx</code> : <code>Update()</code>가 완료된 hmac context.</li>
+<li><code>md</code> : HMAC을 저장할 버퍼.</li>
+<li><code>len</code> : 출력된 HMAC의 길이를 저장.</li>
+<li>출력된 HMAC을 <code>md</code>에 저장.</li>
+<li><code>md_len</code>은 <code>NULL</code>이면 안됨.</li>
+</ul>
+<h3 id="cleanup">Cleanup</h3>
+<pre><code class="c">void HMAC_CTX_cleanup(HMAC_CTX *ctx);
+void HMAC_cleanup(HMAC_CTX *ctx);
+</code></pre>
+
+<ul>
+<li>hmac context를 clean up. (HMAC을 생성하기 위해 할당되었던 자원을 해제, 키 값 제거 등 context의 내용을 삭제)</li>
+<li><code>HMAC_cleanup()</code>은 <code>HMAC_CTX_cleanup()</code>의 별칭, 0.9.6b와 하위 호환성(back compatibility)을 위해 사용, 사용되지 않음.</li>
+</ul>
+<h2 id="example">Example</h2>
+<h3 id="hmacc">hmac.c</h3>
+<pre><code class="c">Example - HMAC for a message.
+/* hmac.c */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;openssl/hmac.h&gt;
+
+#define eprintfExit(x, ...) { fprintf(stderr, __VA_ARGS__); exit(x); }
+#define eprintfReturn(x, ...) { fprintf(stderr, __VA_ARGS__); return (x); }
+
+void printhex(unsigned char *b, int bLen)
+{
+    int i;
+    printf(&quot;%02X&quot;,b[0]);
+    for(i=1; i&lt;bLen; i++)
+        printf(&quot;:%02X&quot;, b[i]);
+    printf(&quot;\n&quot;);
+}
+
+int make_hmac(const char *mdname, unsigned char *md, int *mdLen,
+        const unsigned char *key, const int keyLen,
+        const unsigned char *m, const int mLen)
+{
+    HMAC_CTX hctx;
+    const EVP_MD* evpmd;
+
+    OpenSSL_add_all_digests();
+    if(!(evpmd=EVP_get_digestbyname(mdname)))
+        eprintfReturn(0, &quot;Unknown digest name.\n&quot;);
+
+    HMAC_Init(&amp;hctx, key, keyLen, evpmd);
+    HMAC_Update(&amp;hctx, m, mLen);
+    HMAC_Final(&amp;hctx, md, mdLen);
+
+    HMAC_CTX_cleanup(&amp;hctx);
+
+    return 1;
+}
+
+void main(int argc, char **argv)
+{
+    unsigned char md[EVP_MAX_MD_SIZE];
+    int  mdLen;
+
+    if(argc!=4)
+        eprintfExit(1, &quot;Usage: %s &lt;digest name&gt; &lt;password&gt; &lt;messages&gt;.\n&quot;, argv[0]);
+
+    /* use HMAC() */
+    // OpenSSL_add_all_digests();
+    // HMAC(EVP_get_digestbyname(argv[1]), argv[2], strlen(argv[2]), argv[3], strlen(argv[3]), md, &amp;mdLen);
+    /* end of 'use HMAC() */
+    if(!make_hmac(argv[1], md, &amp;mdLen, argv[2], strlen(argv[2]), argv[3], strlen(argv[3])))
+        exit(2);
+
+    printf(&quot;HMAC=&quot;);
+    printhex(md, mdLen);
+}
+</code></pre>
+
+<h3 id="_2">실행 결과</h3>
+<pre><code class="bash">$ gcc hmac.c -lcrypto
+$ ./a.out sha1 password1234 &quot;Hello, openssl&quot;
+HMAC=D3:94:59:1E:6D:99:06:62:E9:A6:84:BD:27:A8:34:EB:E4:6D:53:B0
+$ ./a.out sha1 &quot;password 1234&quot; &quot;Hello, openssl&quot;
+HMAC=F5:19:38:E1:95:8D:16:B0:54:7D:C0:00:B7:E3:3C:2E:69:3A:5C:BE
+$
+</code></pre>
+
+<h1 id="reference">Reference</h1>
+<p>[1] OpenSSL을 이용한 보안 프로그래밍 / 네트워크연구실(http://network.hanbat.ac.kr)
+[2] www.openssl.org</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+
+</body>
+</html>
