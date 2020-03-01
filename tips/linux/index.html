@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Tips - Jgseong's Note</title>
+  <title>Linux - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Tips";
-    var mkdocs_page_input_path = "tips/etc.md";
+    var mkdocs_page_name = "Linux";
+    var mkdocs_page_input_path = "tips/linux.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -109,9 +109,70 @@
 		
     <span class="caption-text">Tips</span>
     <ul class="subnav">
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../linux/">Linux</a>
+    <a class="current" href="./">Linux</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#tips">Tips</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#change-the-username">Change the Username</a></li>
+        
+            <li><a class="toctree-l4" href="#install-system-tray-icon-on-elementary-os-juno">Install system tray icon on elementary OS Juno</a></li>
+        
+            <li><a class="toctree-l4" href="#visudo">visudo</a></li>
+        
+            <li><a class="toctree-l4" href="#fix-perl-warning-about-the-locale-failed">Fix perl warning about the locale failed</a></li>
+        
+            <li><a class="toctree-l4" href="#ssh-login-with-public-key">SSH login with public key</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#mbr">MBR 제거</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#windows">Windows</a></li>
+        
+            <li><a class="toctree-l4" href="#linux">Linux</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#ntfs-mount-error">NTFS mount error</a></li>
+    
+
+    <li class="toctree-l3"><a href="#grub-customizer">grub-customizer</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#check-key-pair">Check key pair</a></li>
+        
+            <li><a class="toctree-l4" href="#copy-the-public-key-to-server">Copy the public key to server</a></li>
+        
+            <li><a class="toctree-l4" href="#check-sshd_config-and-restart-sshd">Check sshd_config and restart sshd</a></li>
+        
+            <li><a class="toctree-l4" href="#connect-ssh-by-pubkey">Connect SSH by pubkey</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#windows-10">Windows 10</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#portable-program">Portable program, 검색 바에 나오게 하기</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#wireshark">사용자 계정으로 wireshark 실행</a></li>
+    
+
+    </ul>
                 </li>
     </ul>
 	    </li>
@@ -137,8 +198,12 @@
     <li><a href="../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Tips &raquo;</li>
+        
+      
     
-    <li>Tips</li>
+    <li>Linux</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -348,10 +413,255 @@ Generation complete.
 </ol>
 </li>
 </ol>
+<!-- TITLE: MBR 관련 Tips -->
+
+<!-- SUBTITLE: Bootloader,MBR,Disk 관련 설정 -->
+
+<h1 id="mbr">MBR 제거</h1>
+<h2 id="windows">Windows</h2>
+<ol>
+<li>HxD 실행 - <a href="https://mh-nexus.de/en/downloads.php?product=HxD">HxD 다운로드</a></li>
+<li>관리자 권한으로 실행</li>
+<li>디스크 열기 (기타설정 - 디스크 열기)</li>
+<li>읽기 전용으로 읽기 체크박스 해제 - 물리디스크 - 해당 디스크 선택</li>
+<li>디스크 수정에 대한 경고 팝업 - '수락'</li>
+<li>블록 선택 (편집 - 블록 선택, Ctrl+E)</li>
+<li>'10진수' 선택</li>
+<li>오프셋 시작 0, 길이 446</li>
+<li>0x00000000 ~ 0x000001BD (446 Bytes) : MBR 영역</li>
+<li>'수락'</li>
+<li>선택 채우기 (편집 - 선택 채우기)</li>
+<li>프리셋 삭제 방법 - 제로바이트</li>
+<li>'수락'</li>
+<li>
+<p>저장 (파일 - 저장, Ctrl+S)</p>
+</li>
+<li>
+<p>파티션의 부팅 가능 속성 제거</p>
+</li>
+<li>'명령 프롬프트' 실행(관리자 권한)</li>
+<li>diskpart 실행</li>
+<li>예시) 디스크 3 의 1번 파티션이 부팅 가능 속성을 제거할 경우.</li>
+</ol>
+<pre><code class="powershell">C:\Windows\system32&gt; diskpart
+
+Microsoft DiskPart 버전 10.0.17134.1
+
+Copyright (C) Microsoft Corporation.
+컴퓨터:  
+
+DISKPART&gt; list disk
+
+  디스크 ###  상태           크기     사용 가능     Dyn  Gpt
+  ----------  -------------  -------  ------------  ---  ---
+  디스크 0    온라인        465 GB           0 B
+  디스크 1    온라인        119 GB       1024 KB
+  디스크 2    온라인         59 GB       2048 KB
+  디스크 3    온라인         14 GB           0 B
+
+DISKPART&gt; select disk 3
+
+3 디스크가 선택한 디스크입니다.
+
+DISKPART&gt; list partition
+
+  파티션 ###  종류              크기     오프셋
+  ----------  ----------------  -------  -------
+  파티션 1    주                   14 GB  1024 KB
+
+DISKPART&gt; select partition 1
+
+1 파티션이 선택한 파티션입니다.
+
+DISKPART&gt; inactive
+
+DiskPart에서 현재 파티션을 비활성을 표시했습니다.
+
+DISKPART&gt; exit
+
+DiskPart 마치는 중...
+
+</code></pre>
+
+<h2 id="linux">Linux</h2>
+<ul>
+<li><em>fdisk</em> 또는 disk 관련 유틸을 통해 해당 디스크의 장치 파일을 파악</li>
+<li>Example) /dev/sda</li>
+</ul>
+<pre><code class="bash">sudo dd if=/dev/zero of=/dev/sda bs=446 count=1
+</code></pre>
+
+<ul>
+<li>MBR 영역을 0으로 채움</li>
+<li>bs(block size), count : bs 크기를 count 만큼 수행
+<!-- TITLE: Mount Errors -->
+<!-- SUBTITLE: mount 관련 에러 해결 방법 정리 (For Linux) --></li>
+</ul>
+<h1 id="ntfs-mount-error">NTFS mount error</h1>
+<ul>
+<li><code>the disk contains an unclean file system (0 0) ...</code> 하면서, 어쩌고 저쩌고 에러 날때</li>
+<li>듀얼 부팅 또는 MBR을 잘못 건들였을 때, 나타나는 증상 </li>
+<li>
+<p>내 환경 : Grub2(sdb1) - Windows10(sdb2), Linux Mint 18.3(sdc*), NTFS-HDD(sda1)</p>
+</li>
+<li>
+<p>보통 ntfsfix로 해결 가능</p>
+</li>
+<li>ntfs HDD dev 파일이 /dev/sda1인 경우</li>
+</ul>
+<pre><code class="bash">sudo ntfsfix /dev/sda1
+</code></pre>
+
+<ul>
+<li>output example</li>
+</ul>
+<pre><code class="bash">$ sudo ntfsfix /dev/sda1 
+Mounting volume... The disk contains an unclean file system (0, 0).
+Metadata kept in Windows cache, refused to mount.
+FAILED
+Attempting to correct errors... 
+Processing $MFT and $MFTMirr...
+Reading $MFT... OK
+Reading $MFTMirr... OK
+Comparing $MFTMirr to $MFT... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Setting required flags on partition... OK
+Going to empty the journal ($LogFile)... OK
+Checking the alternate boot sector... OK
+NTFS volume version is 3.1.
+NTFS partition /dev/sda1 was processed successfully.
+$
+</code></pre>
+
+<!-- TITLE: PPAs -->
+
+<!-- SUBTITLE: Useful PPAs(Personal Package Archives) for APT tools -->
+
+<h1 id="grub-customizer">grub-customizer</h1>
+<ul>
+<li>GUI tools for GRUB bootloader</li>
+</ul>
+<pre><code class="bash">sudo add-apt-repository ppa:danielrichter2007/grub-customizer 
+sudo apt-get update 
+sudo apt-get install grub-customizer
+```# SSH connection by public key authentication
+
+## Generate key pair by `ssh-keygen` at the client machine
+```bash
+# refer to `man ssh-keygen`, `ssh-keygen --help`
+ssh-keygen -t ed25519 -b 512 -f ~/.ssh/jgseong7@naver.com -C &quot;jgseong7@naver.com&quot;
+# -t : public key cipher type
+# -b : key length in bit
+# -f : output file
+# -C : comment for key
+#@note: to encrypt key file, input a passphrase. if empty passphrase, then the private key file would be written as cleartext.
+#@note: the file names and private key comments can be arbitrary.
+</code></pre>
+
+<h2 id="check-key-pair">Check key pair</h2>
+<pre><code class="bash">$ ls ~/.ssh/
+authorized_keys    jgseong7@naver.com    jgseong7@naver.com.pub
+
+# authorized_keys : a file for public key authentication (may be not existed)
+# jgseong7@naver.com : private key generated by previous step.
+# jgseong7@naver.com.pub : public key generated by previous step. typically, the file name is followed by the suffix '.pub'.
+</code></pre>
+
+<h2 id="copy-the-public-key-to-server">Copy the public key to server</h2>
+<ul>
+<li>do follows at client side.</li>
+</ul>
+<pre><code class="bash"># copy a file contents in 'jgseong7@naver.com.pub' and write it to 'authorized_keys' file by ssh and tee
+cat ~/.ssh/jgseong7@naver.com.pub | ssh -t ubuntu@172.16.99.17 'tee -a ~/.ssh/authorized_keys'
+
+# in alternative way, copy the public key file and write it to 'authorized_keys' file by scp and ssh
+scp ~/.ssh/jgseong7@naver.com.pub ubuntu@172.16.99.17:
+ssh ubuntu@172.16.99.17 'cat jgseong7@naver.com.pub &gt;&gt; ~/.ssh/authorized_keys'
+ssh ubuntu@172.16.99.17 'rm jgseong7@naver.com.pub'
+</code></pre>
+
+<h2 id="check-sshd_config-and-restart-sshd">Check <code>sshd_config</code> and restart <code>sshd</code></h2>
+<pre><code class="bash"># '/etc/ssh/sshd_config' in default on ubuntu 16.04 LTS
+cat /etc/ssh/sshd_config | grep -E 'PubkeyAuthentication`|RSAAuthentication'
+# check PubkeyAuthentication yes
+# check RSAAuthentication yes  # for RSA public key
+
+cat /etc/ssh/sshd_config | grep -E 'AuthorizedKeysFile'
+# check 'AuthorizedKeysFile %h/.ssh/authorized_keys' or '#AuthorizedKeysFile    %h/.ssh/authorized_keys'
+# default authorizedKyesFile path is '%h/.ssh/authorized_keys'
+
+# Restart ssh daemons
+sudo systemctl restart sshd
+</code></pre>
+
+<h2 id="connect-ssh-by-pubkey">Connect SSH by pubkey</h2>
+<pre><code class="bash"># -i : specify a identity file. (a.k.a. private key)
+ssh -i ~/.ssh/jgseong7@naver.com ubuntu@172.16.99.17
+
+# identity file could be specifable in `ssh_config`
+# check 'IdentityFile'
+cat .ssh/config # refter to `man ssh`
+&lt;!-- TITLE: Vim--&gt;
+&lt;!-- SUBTITLE: Editor Vim 의 활용/설정 --&gt;
+
+# 자동개행문자 삽입 disable
+* 명령 모드에서 
+```vim
+:set binary
+:set noeol
+</code></pre>
+
+<ul>
+<li>\"는 .vimrc 파일에서 해당 줄(line)이 주석.</li>
+<li>vimrc 설정(<code>~/.vimrc</code>)</li>
+</ul>
+<pre><code class="vim">&quot; ~/.vimrc
+set binary
+set noeol
+</code></pre>
+
+<!-- TITLE: Windows -->
+
+<!-- SUBTITLE: Windows 7/10 팁 정리 -->
+
+<h1 id="windows-10">Windows 10</h1>
+<h2 id="portable-program">Portable program, 검색 바에 나오게 하기</h2>
+<p><code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs</code> 에 portable 프로그램의 바로가기 복사.</p>
+<ul>
+<li>시작 메뉴-프로그램 폴더</li>
+<li><kbd><img alt="WinKey" src="https://www.tenforums.com/images/smilies/start.png" /></kbd> 키 로 검색 가능</li>
+</ul>
+<p><!-- TITLE: Wireshark -->
+<!-- SUBTITLE: Wireshark 설치/설정/사용 관련 팁 --></p>
+<h1 id="wireshark">사용자 계정으로 wireshark 실행</h1>
+<ol>
+<li><code>dumpcap</code> 파일의 소유 그룹과 그룹 실행 권한 확인</li>
+<li><code>which dumpcap</code>으로 경로 확인 가능</li>
+<li>'wireshark' 그룹에 현재 사용자 추가</li>
+</ol>
+<pre><code class="bash">sudo usermod -a -G wireshark $USER
+</code></pre>
+
+<ul>
+<li>output example</li>
+</ul>
+<pre><code class="bash"># dumpcap 파일의 소유 그룹과 그룹 실행 권한 확인
+ls /usr/bin/dumpcap  -l   # or 'ls -l $(which dumpcap)'
+-rwxr-xr-- 1 root wireshark 96464 Jun  1  2017 /usr/bin/dumpcap* 
+sudo usermod -a -G wireshark $USER 
+reboot # or logout/re-login
+</code></pre>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../../openssl/api/" class="btn btn-neutral" title="Openssl-api"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -374,6 +684,8 @@ Generation complete.
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+      
+        <span><a href="../../openssl/api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>

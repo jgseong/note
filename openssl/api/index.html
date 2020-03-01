@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Openssl-api - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Openssl-api";
+    var mkdocs_page_input_path = "openssl/api.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">APIs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../api/c/">C</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tools</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../tools/tmux/">tmux</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Virt.</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../virtualization/docker/">Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../virtualization/qemu/">Qemu</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Libs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../cli/">Openssl-cli</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Openssl-api</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#message-digest">Message Digest</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#dgst">dgst 명령</a></li>
+        
+            <li><a class="toctree-l4" href="#hash">해시(hash)</a></li>
+        
+            <li><a class="toctree-l4" href="#hmac">HMAC</a></li>
+        
+            <li><a class="toctree-l4" href="#_1">서명 및 검증</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#enc">enc</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#about-enc">About enc</a></li>
+        
+            <li><a class="toctree-l4" href="#_2">암호화</a></li>
+        
+            <li><a class="toctree-l4" href="#_3">복호화</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#ec-key-pair">EC key pair</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#private-key">Private key 생성</a></li>
+        
+            <li><a class="toctree-l4" href="#public-key">Public key 생성</a></li>
+        
+            <li><a class="toctree-l4" href="#ecparam">ecparam 옵션</a></li>
+        
+            <li><a class="toctree-l4" href="#ec">ec 옵션</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#settings-for-root-ca">Settings for Root CA</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#root-ca-key">root CA key 생성</a></li>
+        
+            <li><a class="toctree-l4" href="#root-ca">root CA 인증서 생성</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#_4">사용자 인증서 생성</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#at-a-host">사용자 개인 키 생성 (at a host)</a></li>
+        
+            <li><a class="toctree-l4" href="#csr-at-a-host">CSR 생성 (at a host)</a></li>
+        
+            <li><a class="toctree-l4" href="#at-a-root-ca">인증서 발행 (at a root CA)</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#x509">X509 인증서 내용 출력</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#at-a-root-ca_1">인증서 발행 확인 (at a root CA)</a></li>
+        
+            <li><a class="toctree-l4" href="#_5">인증서 검증</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tips</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../tips/linux/">Linux</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Libs &raquo;</li>
+        
+      
+    
+    <li>Openssl-api</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TITLE: Digest -->
+
+<!-- SUBTITLE: A quick summary of digest message by using openssl -->
+
+<h1 id="message-digest">Message Digest</h1>
+<h2 id="dgst">dgst 명령</h2>
+<ul>
+<li>해시(Hash), 메시지 다이제스트(Message Digest)</li>
+<li>HMAC(Hashed MAC)</li>
+<li>서명(Sign) 및 검증(Verify)</li>
+<li>Default 입/출력은 stdin/stdout (파일 미지정 시), hex 출력 : default</li>
+<li><code>dgst</code> 가 아닌 sha, sha1, ... 등 특정 알고리즘으로 사용 가능, (<code>man</code> 참고)</li>
+<li>지원하는 알고리즘 목록은 <code>openssl list-message-digest-algorithms</code>로 확인 가능</li>
+<li>사용하는 <code>algorithm</code>은 <code>openssl dgst -help</code> (또는 <code>man</code> 참고)</li>
+<li>사용되는 입력 파일, '<code>infiles</code> ...'는 명령문 마지막에 위치해야 함</li>
+<li>
+<p><code>man dgst</code> 참고</p>
+<blockquote>
+<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
+openssl dgst  'algorithm' [-hmac 'key']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-sign 'key file']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infiles ...']
+...</p>
+</blockquote>
+</li>
+<li>
+<p>Options are</p>
+</li>
+</ul>
+<pre><code class="bash">-c              to output the digest with separating colons
+-r              to output the digest in coreutils format
+-d              to output debug info
+-hex            output as hex dump
+-binary         output in binary form
+-hmac arg       set the HMAC key to arg
+-non-fips-allow allow use of non FIPS digest
+-sign   file    sign digest using private key in file
+-verify file    verify a signature using public key in file
+-prverify file  verify a signature using private key in file
+-keyform arg    key file format (PEM or ENGINE)
+-out filename   output to filename rather than stdout
+-signature file signature to verify
+-sigopt nm:v    signature parameter
+-hmac key       create hashed MAC with key
+-mac algorithm  create MAC (not neccessarily HMAC)
+-macopt nm:v    MAC algorithm parameters or key
+-engine e       use engine e, possibly a hardware device.
+-gost-mac       to use the gost-mac message digest algorithm
+-md_gost94      to use the md_gost94 message digest algorithm
+-md4            to use the md4 message digest algorithm
+-md5            to use the md5 message digest algorithm
+-mdc2           to use the mdc2 message digest algorithm
+-ripemd160      to use the ripemd160 message digest algorithm
+-sha            to use the sha message digest algorithm
+-sha1           to use the sha1 message digest algorithm
+-sha224         to use the sha224 message digest algorithm
+-sha256         to use the sha256 message digest algorithm
+-sha384         to use the sha384 message digest algorithm
+-sha512         to use the sha512 message digest algorithm
+-whirlpool      to use the whirlpool message digest algorithm
+</code></pre>
+
+<h2 id="hash">해시(hash)</h2>
+<ul>
+<li>메시지 다이제스트</li>
+<li>각 파일에 대한 해시 값을 출력, 3개 파일이 입력이면 3개의 해시 값 출력</li>
+<li><code>-binary</code>와 <code>-hex</code>는 베타적으로 사용<blockquote>
+<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="bash"># e.g.1
+openssl dgst -sha256 -out text.md text.txt
+
+# e.g.2
+openssl sha256 -hex text.txt text2.txt text3.txt
+
+# output example for e.g.2
+SHA256(text.txt)= a5532c7f2c9a18ae3976a91eddf93faf7f6ed1653fe7bf73daee1eddfc999577
+SHA256(text2.txt)= 6be9867ae05e7505fb9bf3d59cfd2af13337fc17915cdeb099286b082f85bb39
+SHA256(text3.txt)= a4c6d0d073ff1c3405bcd49d96d8c5dc3f4905402e254ffe725c55f8746e0aec
+
+# e.g.3
+openssl dgst -sha256 -binary -out text.md text.txt 
+
+# output example for e.g.3
+hexdump text.md
+0000000 53a5 7f2c 9a2c ae18 7639 1ea9 f9dd af3f
+0000010 6e7f 65d1 e73f 73bf eeda dd1e 99fc 7795
+0000020
+</code></pre>
+
+<h2 id="hmac">HMAC</h2>
+<ul>
+<li>키(key) 가 필요</li>
+<li>'key' 는 hex 값<blockquote>
+<p>openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="bash">openssl dgst -sha256 -hmac &quot;hmackey1234&quot; -out text.hmac text.txt
+</code></pre>
+
+<h2 id="_1">서명 및 검증</h2>
+<ul>
+<li>키 파일(.pem, .key, ...)이 필요, 키 쌍 또는 개인 키</li>
+<li>Default key encoding is PEM </li>
+<li><a href="./openssl/cli/keygen#ec-key-pair">EC key pair 생성</a> 참고</li>
+<li>바이너리(binary) 로 출력, dafault</li>
+</ul>
+<h3 id="sign">서명(sign)</h3>
+<blockquote>
+<p>openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+<h3 id="verify">검증(verify)</h3>
+<blockquote>
+<p>openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'</p>
+</blockquote>
+<ul>
+<li>Example output for signing message(or file)</li>
+</ul>
+<pre><code class="bash"># 서명 예)
+openssl dgst -sha224 -binary -out text.md text.txt
+openssl dgst -sha224 -sign ecprivkey.pem -out text.sign text.md
+</code></pre>
+
+<ul>
+<li>Example output for verifying signature</li>
+</ul>
+<pre><code class="bash"># 검증 예1) 공개 키로 검증
+$ openssl dgst -sha224 -verify ecpubkey.pem -signature text.sign text.md
+Verified OK
+
+# 검증 예2) 개인 키로 검증
+$ openssl dgst -sha224 -prverify ecprivkey.pem -signature text.sign text.md
+Verified OK
+</code></pre>
+
+<!-- TITLE: Enctypt/Decrypt -->
+
+<!-- SUBTITLE: A quick summary of enc commands of openssl -->
+
+<h1 id="enc">enc</h1>
+<h2 id="about-enc">About enc</h2>
+<ul>
+<li>대칭 암호 기능 (Symmetric cipher routines)</li>
+<li>파일 암호화/복호화</li>
+<li>기본적으로 stdin/stdout 사용</li>
+<li><code>man enc</code> 참고<blockquote>
+<p>openssl enc [-e|d] [-p] 'cipher type' -in 'infile' -out 'outfile'
+openssl enc [-e|d] [-p] 'cipher type' -in 'infile' -out 'outfile' -k 'passphrase'
+openssl enc [-e|d] [-p] 'cipher type' -in 'infile' -out 'outfile' -K 'key(in hex)' -iv 'IV(in hex)' -S 'salt(in hex)'
+...</p>
+</blockquote>
+</li>
+<li>Options are</li>
+</ul>
+<pre><code class="bash">-in 'file'     input file
+-out &lt;file&gt;    output file
+-pass &lt;arg&gt;    pass phrase source
+-e             encrypt
+-d             decrypt
+-a/-base64     base64 encode/decode, depending on encryption flag
+-k             passphrase is the next argument
+-kfile         passphrase is the first line of the file argument
+-md            the next argument is the md to use to create a key
+                 from a passphrase.  One of md2, md5, sha or sha1
+-S             salt in hex is the next argument
+-K/-iv         key/iv in hex is the next argument
+-[pP]          print the iv/key (then exit if -P)
+-bufsize &lt;n&gt;   buffer size
+-nopad         disable standard block padding
+-engine e      use engine e, possibly a hardware device.
+</code></pre>
+
+<h2 id="_2">암호화</h2>
+<ul>
+<li><code>-e</code> 옵션이 기본값, <code>-e</code>이 없으면 기본적으로 암호화</li>
+<li><code>'cipher type'</code> 목록은 <code>man enc</code> 또는 <code>openssl enc -help</code>로 확인 가능</li>
+<li><code>-help</code>는 잘못된 옵션으로 <code>openssl</code> 에서 잘못된 옵션을 실행하면 'usage'가 출력<blockquote>
+<p>openssl enc [-e] 'cipher type' -in 'infile' -out 'outfile'
+openssl enc [-e] 'cipher type' -in 'infile' -out 'outfile' -k 'passphrase'
+openssl enc [-e] 'cipher type' -in 'infile' -out 'outfile' -K 'key(in hex)' -iv 'IV(in hex)' -S 'salt(in hex)'
+...</p>
+</blockquote>
+</li>
+<li>e.g.</li>
+</ul>
+<pre><code class="bash"># (1) text.txt를 AES-128-CBC 알고리즘으로 암호화한 결과를 text.bin 파일로 출력, key는 NULL 값
+openssl enc -e -aes-128-cbc -in text.txt -out text.bin
+
+# (2) key=&quot;password1234&quot;로 지정하여 파일 암호화
+openssl enc -e -aes-128-cbc -in text.txt -out text.bin -k &quot;password1234&quot;
+
+# (3) key(in hex)='83A0423EB66693020B7A78AA0F08DE6C', IV(in hex)='EBA02B3EF93F14FDEB64E09A815DE8E8',
+#       salt(in hex)='07C95502C4D5F3D5' 로 지정하여 파일 암호화
+openssl enc -e -aes-128-cbc -in text.txt -out text.bin \ 
+-K 83A0423EB66693020B7A78AA0F08DE6C -iv EBA02B3EF93F14FDEB64E09A815DE8E8 -S 07C95502C4D5F3D5
+</code></pre>
+
+<h2 id="_3">복호화</h2>
+<ul>
+<li><code>-d</code> 옵션을 사용해야 복호화</li>
+<li>복호화 시에는 암호화에 사용된 알고리즘과 키 값이 동일해야 정상적으로 복호화가 이루어짐</li>
+<li>IV와 salt 지정해서 암호화한 경우, IV와 salt값도 동일해야 함</li>
+<li>key 값만 입력한 경우, key값을 기준으로 IV와 salt가 생성되어 암호화되므로, 복호화 시에도 key값만 입력해야 정상적인 복호화 가능<blockquote>
+<p>openssl enc -d 'cipher type' -in 'infile' -out 'outfile'
+openssl enc -d 'cipher type' -in 'infile' -out 'outfile' -k 'passphrase'
+openssl enc -d 'cipher type' -in 'infile' -out 'outfile' -K 'key(in hex)' -iv 'IV(in hex)' -S 'salt(in hex)'
+...</p>
+</blockquote>
+</li>
+<li>e.g.</li>
+</ul>
+<pre><code class="bash"># (1) 암호화된 파일 text.bin을 AES-128-CBC 알고리즘을 이용하여 복호화한 결과를 text.txt 파일로 출력, key는 NULL 값
+openssl enc -d -aes-128-cbc -in text.bin -out text.txt
+
+# (2) key=&quot;password1234&quot;로 암호화된 파일 복호화
+openssl enc -d -aes-128-cbc -in text.bin -out text.txt -k &quot;password1234&quot;
+
+# (3) key(in hex)='83A0423EB66693020B7A78AA0F08DE6C', IV(in hex)='EBA02B3EF93F14FDEB64E09A815DE8E8',
+#       salt(in hex)='07C95502C4D5F3D5' 로 지정하여 파일 복호화
+openssl enc -d -aes-128-cbc -in text.bin -out text.txt -K 83A0423EB66693020B7A78AA0F08DE6C -iv EBA02B3EF93F14FDEB64E09A815DE8E8 -S 07C95502C4D5F3D5
+</code></pre>
+
+<!-- TITLE: Generate Key Pair -->
+
+<!-- SUBTITLE: How to generate the key pair by using OpenSSL -->
+
+<h1 id="ec-key-pair">EC key pair</h1>
+<ul>
+<li>EC(Elliptic Curve) 알고리즘을 사용한 키 생성</li>
+<li>Asymmetric key 알고리즘은 private key를 생성한 후, private key에 대응하는 public key를 생성</li>
+</ul>
+<h2 id="private-key">Private key 생성</h2>
+<ul>
+<li>default로 PEM(Privacy-Enhanced Mail) 포맷으로 생성<blockquote>
+<p>openssl ecparam -genkey -name 'curve name' -out 'outfile'</p>
+</blockquote>
+</li>
+<li>Example</li>
+</ul>
+<pre><code class="bash">openssl ecparam -genkey -name prime256v1 -out ecprivkey.pem
+</code></pre>
+
+<ul>
+<li>Example - Encrypt private key </li>
+</ul>
+<pre><code class="bash">openssl ec -aes-128-cbc -in ecprivkey.pem -out new_ecprivkey.pem
+# man enc 참고
+</code></pre>
+
+<h2 id="public-key">Public key 생성</h2>
+<blockquote>
+<p>openssl ec -in 'infile' -pubout -out 'outfile'
+* <code>'infile'</code> : private key 파일
+* <code>-pubout</code> : <code>'infile'</code>에 대응하는 공개 키 출력
+* Example</p>
+</blockquote>
+<pre><code class="bash">openssl ec -in ecprivkey.pem -pubout -out ecpubkey.pem
+</code></pre>
+
+<h2 id="ecparam">ecparam 옵션</h2>
+<ul>
+<li><code>man ecparam</code> 참고</li>
+</ul>
+<pre><code class="bash">ecparam [options] &lt;infile&gt; outfile
+where options are
+ -inform arg       input format - default PEM (DER or PEM)
+ -outform arg      output format - default PEM
+ -in  arg          input file  - default stdin
+ -out arg          output file - default stdout
+ -noout            do not print the ec parameter
+ -text             print the ec parameters in text form
+ -check            validate the ec parameters
+ -C                print a 'C' function creating the parameters
+ -name arg         use the ec parameters with 'short name' name
+ -list_curves      prints a list of all currently available curve 'short names'
+ -conv_form arg    specifies the point conversion form 
+                   possible values: compressed
+                                    uncompressed (default)
+                                    hybrid
+ -param_enc arg    specifies the way the ec parameters are encoded
+                   in the asn1 der encoding
+                   possible values: named_curve (default)
+                                    explicit
+ -no_seed          if 'explicit' parameters are chosen do not use the seed
+ -genkey           generate ec key
+ -rand file        files to use for random number input
+ -engine e         use engine e, possibly a hardware device
+</code></pre>
+
+<h2 id="ec">ec 옵션</h2>
+<ul>
+<li><code>man ec</code> 참고</li>
+</ul>
+<pre><code class="bash">ec [options] &lt;infile&gt; outfile
+where options are
+ -inform arg     input format - DER or PEM
+ -outform arg    output format - DER or PEM
+ -in arg         input file
+ -passin arg     input file pass phrase source
+ -out arg        output file
+ -passout arg    output file pass phrase source
+ -engine e       use engine e, possibly a hardware device.
+ -des            encrypt PEM output, instead of 'des' every other 
+                 cipher supported by OpenSSL can be used
+ -text           print the key
+ -noout          dont print key out
+ -param_out      print the elliptic curve parameters
+ -conv_form arg  specifies the point conversion form 
+                 possible values: compressed
+                                  uncompressed (default)
+                                   hybrid
+ -param_enc arg  specifies the way the ec parameters are encoded
+                 in the asn1 der encoding
+                 possible values: named_curve (default)
+                                  explicit
+</code></pre>
+
+<!-- TITLE: PKI -->
+
+<!-- SUBTITLE: A quick summary of PKI by using openssl -->
+
+<h1 id="settings-for-root-ca">Settings for <strong>Root CA</strong></h1>
+<ul>
+<li>openssl을 이용하여 인증서 발급을 위해 PKI 인프라 구성</li>
+<li>root CA 에서 사용하는 기본 디렉터리 및 파일 준비.</li>
+<li>Example</li>
+</ul>
+<pre><code class="bash">sudo -s
+mkdir -p /opt/pki/root
+cd /opt/pki/root
+export ROOTCADIR=`pwd`
+mkdir certs crl newcerts private
+echo 1000 &gt; serial ; touch index.txt 
+cp /etc/pki/tls/openssl.cnf $ROOTCADIR/openssl.cnf
+export OPENSSL_CONF=$ROOTCADIR/openssl.cnf
+</code></pre>
+
+<ul>
+<li>Check root ca for files</li>
+</ul>
+<pre><code class="bash">$ ls /opt/pki/root
+drwx------. 2 root  4096 Sep 20 21:23 private
+drwxr-xr-x. 2 root  4096 Sep 20 21:23 newcerts
+drwxr-xr-x. 2 root  4096 Sep 20 21:23 crl
+drwxr-xr-x. 2 root  4096 Sep 20 21:23 certs
+-rw-r--r--. 1 root     5 Sep 20 21:24 serial
+-rw-r--r--. 1 root     0 Sep 20 21:24 index.txt
+-rw-r--r--. 1 root 10923 Sep 20 21:24 openssl.cnf
+</code></pre>
+
+<ul>
+<li><code>openssl.cnf</code> 내용</li>
+</ul>
+<pre><code>...
+####################################################################
+[ ca ]
+default_ca      = CA_default            # 기본 CA 섹션
+
+####################################################################
+[ CA_default ]                          # default_ca 의 지정한 섹션 시작 부분 
+
+dir             = /opt/pki/root         # Where everything is kept
+                                        # 위에서 만든 경로로 수정
+certs           = $dir/certs            # Where the issued certs are kept
+crl_dir         = $dir/crl              # Where the issued crl are kept
+database        = $dir/index.txt        # database index file.
+#unique_subject = no                    # Set to 'no' to allow creation of
+                                        # several ctificates with same subject.
+new_certs_dir   = $dir/newcerts         # default place for new certs.
+
+certificate     = $dir/cacert.pem       # The CA certificate
+serial          = $dir/serial           # The current serial number
+crlnumber       = $dir/crlnumber        # the current crl number
+                                        # must be commented out to leave a V1 CRL
+crl             = $dir/crl.pem          # The current CRL
+private_key     = $dir/private/cakey.pem# The private key 
+RANDFILE        = $dir/private/.rand    # private random number file
+
+x509_extensions = usr_cert              # The extentions to add to the cert
+...
+</code></pre>
+
+<h2 id="root-ca-key">root CA key 생성</h2>
+<ul>
+<li>인증서 생성에 필요한 CA의 개인키 를 생성.</li>
+<li>OpenSSL 의 "<a href="./openssl/cli/keygen#ec-key-pair">EC key pair 생성</a>" 참고.</li>
+<li>Example</li>
+</ul>
+<pre><code class="bash">cd $ROOTCA
+openssl ecparam -genkey -name prime256v1 -out private/cakey.pem
+openssl ec -in private/cakey.pem -out private/cakey.pem -aes256
+chmod 400 private/cakey.pem
+</code></pre>
+
+<h2 id="root-ca">root CA 인증서 생성</h2>
+<ul>
+<li>자가 서명(self-signed) 된 인증서를 생성.</li>
+<li>x509 형식의 인증서로 생성.</li>
+<li>PEM으로 출력(default)</li>
+<li><code>man req</code> 참고.</li>
+<li>Example output</li>
+</ul>
+<pre><code class="bash">openssl req -new -x509 -extensions v3_ca -key private/cakey.pem -out cacert.pem
+</code></pre>
+
+<pre><code class="bash">... 
+Country Name (2 letter code) [XX]:KR
+State or Province Name (full name) []:Seoul
+Locality Name (eg, city) [Default City]:Seoul
+Organization Name (eg, company) [Default Company Ltd]:example
+Organizational Unit Name (eg, section) []:root CA
+Common Name (eg, your name or your server's hostname) []:rootca.example.com
+Email Address []:rootca@example.com
+</code></pre>
+
+<pre><code class="bash">chmod 444 certs/ca.crt.pem
+</code></pre>
+
+<h1 id="_4">사용자 인증서 생성</h1>
+<ul>
+<li>CSR(Certificate Signing Request) 를 생성 후, root CA에게 인증서 발행을 요청.</li>
+<li>PEM으로 출력(기본값)</li>
+</ul>
+<h3 id="at-a-host">사용자 개인 키 생성 (at a host)</h3>
+<ul>
+<li>인증서를 생성하기 위해서는 개인 키를 생성 필요.</li>
+</ul>
+<pre><code class="bash">cd opt/pki
+mkdir host1 &amp;&amp; cd host1
+openssl genrsa -out host1.key.pem
+</code></pre>
+
+<h2 id="csr-at-a-host">CSR 생성 (at a host)</h2>
+<ul>
+<li>사용자의 개인 키로 CSR 파일 생성.</li>
+<li>CSR 생성 시, Country, State, Locality, Organization 는 root CA의 인증서와 동일해야 함(기본값), openssl.cnf 에서 설정 가능.</li>
+</ul>
+<pre><code class="bash">openssl req -new -key host1.key.pem -out host1.csr.pem
+</code></pre>
+
+<pre><code class="bash">...
+Country Name (2 letter code) [XX]:KR
+State or Province Name (full name) []:Daejeon
+Locality Name (eg, city) [Default City]:Yuseong 
+Organization Name (eg, company) [Default Company Ltd]:example
+Organizational Unit Name (eg, section) []:host1
+Common Name (eg, your name or your server's hostname) []:host1.example.com
+Email Address []:host1@example.com
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+</code></pre>
+
+<h2 id="at-a-root-ca">인증서 발행 (at a root CA)</h2>
+<ul>
+<li>CA로부터 인증서 발행.</li>
+<li>발행 성공 시, serial 번호가 증가하며 index.txt에 추가.</li>
+<li>serial, index.txt눈 임의로 수정하면 안됨.</li>
+<li><code>man ca</code> 참고.</li>
+</ul>
+<pre><code class="bash"># 기본적으로 'serial번호.pem' 형식으로 생성
+openssl ca -in host1.csr.pem
+# 출력 파일 이름 지정
+openssl ca -in host1.csr.pem -out host1.crt.pem
+</code></pre>
+
+<ul>
+<li>옵션 없이 사용하면 openssl.cnf에서 정의된 CA의 키, 인증서, MD 알고리즘 사용(기본값).</li>
+<li><code>openssl.cnf</code> 참조, <code>-config</code> 옵션으로 openssl 설정 파일 지정 가능.</li>
+<li>발행된 인증서는 $ROOTCADIR/newcerts/시리얼번호.pem 형태로 생성.</li>
+<li>옵션으로 CA 키, CA 인증서, MD 알고리즘, 발행된 인증서의 위치와 이름을 지정 가능.</li>
+<li>MD 알고리즘은 CA 인증서와 동일해야 발행 가능.</li>
+<li>
+<p>인증서 발행 시 ca 명령</p>
+<blockquote>
+<p>openssl ca  -in 'csr infile' [-config 'config file']  [-keyfile 'CA keyfile']  [-cert 'CA certificate file']  [-notext]  [-md 'md algorithm]  [-out 'cert outfile']
+...</p>
+</blockquote>
+</li>
+<li>
+<p><code>openssl.cnf</code> 내용</p>
+</li>
+</ul>
+<pre><code>dir             = /opt/pki/root         # root CA basedir.
+certs           = $dir/certs
+new_certs_dir   = $dir/newcerts          # use if no &quot;-out&quot; option.
+certificate     = $dir/cacert.pem        # use if no &quot;-cert&quot; option.
+private_key     = $dir/private/cakey.pem # use if no &quot;-keyfile&quot; option.
+default_days    = 365                    # use if no &quot;-days&quot; option.
+default_md      = sha256                 # use if no &quot;-md&quot; option.
+</code></pre>
+
+<ul>
+<li>Example</li>
+</ul>
+<pre><code class="bash">openssl ca -keyfile $ROOTCADIR/private/cakey.pem -cert $ROOTCADIR/cacert.pem -notext -md -sha1 -in host1.csr.pem -out host1.crt.pem
+</code></pre>
+
+<h1 id="x509">X509 인증서 내용 출력</h1>
+<blockquote>
+<p>openssl x509 -in 'infile' -noout -text
+* Example</p>
+</blockquote>
+<pre><code class="bash">openssl x509 -in host1.crt.pem -noout -text
+</code></pre>
+
+<h2 id="at-a-root-ca_1">인증서 발행 확인 (at a root CA)</h2>
+<pre><code class="bash">$ cat $ROOTCADIR/index.txt
+V   170920145518Z       1000    unknown /C=KR/ST=Daejeon/O=example/OU=host1/CN=host1.example.com/emailAddress=host1@example.com
+</code></pre>
+
+<h2 id="_5">인증서 검증</h2>
+<ul>
+<li>발행된 인증서는 CA 인증서로 검증(Verify)한다.</li>
+<li>CA 인증서만 있으면 검증 가능</li>
+<li>인증서 검증<blockquote>
+<p>openssl verify -CAfile 'CA certificate file' 'target certificate file'</p>
+</blockquote>
+</li>
+<li>Example</li>
+</ul>
+<pre><code class="bash">openssl verify -CAfile $ROOTCADIR/cacert.pem host1.crt.pem
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../tips/linux/" class="btn btn-neutral float-right" title="Linux">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../cli/" class="btn btn-neutral" title="Openssl-cli"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../cli/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../tips/linux/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
