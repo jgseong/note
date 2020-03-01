@@ -1,0 +1,51 @@
+#!/bin/sh
+
+makeDockerfile()
+{
+  Dockerfile=./Dockerfile
+  BASEIMG="alpine:3.11"
+  IMGTAG="$1"
+
+  if ! [ -f "${Dockerfile}" ]; then
+    cat > ${Dockerfile} <<EOF
+    FROM ${BASEIMG}
+    RUN apk add --no-cache python python-dev py-pip build-base openssh git-fast-import
+    RUN pip install virtualenv
+    RUN pip install mkdocs
+    RUN rm -rf /var/cache/apk/*
+EOF
+
+    if [ -f ./config ]; then
+      cat >> ${Dockerfile} <<EOF
+      COPY config /root/.ssh/config
+      RUN chmod 0400 /root/.ssh/config
+EOF
+    fi
+    
+    if [ -f ./priv.key ]; then
+      cat >> ${Dockerfile} <<EOF
+      COPY priv.key /root/.ssh/priv.key
+      RUN chmod 0400 /root/.ssh/priv.key
+EOF
+    fi
+
+    cat >> ${Dockerfile} <<EOF
+    WORKDIR /docs
+    CMD ["mkdocs", "serve"]
+EOF
+  fi
+  docker build --tag "${IMGTAG}:latest" .
+}
+
+# main
+IMG=mkdocs
+
+CNT=`docker images "${IMG}" -q | wc -l`
+if [ ${CNT} -eq 0 ]; then
+  makeDockerfile ${IMG}
+fi
+
+docker run --rm -it -v ${PWD}:/docs ${IMG} mkdocs build
+
+docker run --rm -it -v ${PWD}:/docs ${IMG} mkdocs gh-deploy
+
