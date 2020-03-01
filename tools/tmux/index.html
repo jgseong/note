@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Tmux - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Tmux";
+    var mkdocs_page_input_path = "tools/tmux.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../tips/">Tips</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Tmux</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TMUX Summary -->
+
+<h1 id="tmux">Tmux</h1>
+<h2 id="install-tmux-by-apt">Install Tmux by APT</h2>
+<pre><code class="sh">sudo add-apt-repository -y ppa:hnakamur/tmux 
+sudo apt update
+sudo apt install tmux
+</code></pre>
+
+<h2 id="install-tmux-to-compile">Install Tmux to compile</h2>
+<pre><code class="sh">#!/bin/bash
+sudo apt update
+# install packages need to build
+sudo pat install -y git automake build-essential pkg-config libevent-dev libncurses5-dev
+
+[ -d /tmp/tmux ] &amp;&amp; rm -rf /tmp/tmux
+git clone https://github.com/tmux/tmux.git /tmp/tmux 
+
+cd /tmp/tmux &amp;&amp; \
+git checkout master &amp;&amp; \
+./autogen.sh &amp;&amp; \
+./configure &amp;&amp; \ 
+make &amp;&amp; \
+sudo make install &amp;&amp; \
+cd - &amp;&amp; \
+rm -rf /tmp/tmux
+</code></pre>
+
+<h2 id="components">Components</h2>
+<ul>
+<li>session : tmux 실행단위, windows로 구성</li>
+<li>window : terminal 내 화면 단위(tab)</li>
+<li>pane : window 내 분할된 화면 단위</li>
+<li>status bar : 상태 bar</li>
+</ul>
+<h2 id="commands-shortcuts">Commands Shortcuts</h2>
+<pre><code class="bash">Ctrl+b, &lt;key&gt;   # ^b
+
+# Help
+Ctrl+b, ?       # ^b ?
+
+# Command mode
+Ctrl+b, :
+</code></pre>
+
+<h2 id="session">Session</h2>
+<ul>
+<li>New session</li>
+<li>`tmux new -s 'session name' in shell</li>
+<li>
+<p><code>^b n</code></p>
+</li>
+<li>
+<p>Edit session name</p>
+</li>
+<li>
+<p><code>^b $</code></p>
+</li>
+<li>
+<p>Detach session</p>
+</li>
+<li>
+<p><code>^b d</code> in tmux</p>
+</li>
+<li>
+<p>Attach session</p>
+</li>
+<li>
+<p><code>tmux attach -t 'session-number' # or 'session name'</code></p>
+</li>
+<li>
+<p>List sessions</p>
+</li>
+<li><code>tmux ls</code></li>
+</ul>
+<h2 id="window">Window</h2>
+<ul>
+<li>New window</li>
+<li>
+<p><code>^b c</code></p>
+</li>
+<li>
+<p>New Sesseion with window</p>
+</li>
+</ul>
+<pre><code>tmux new -s 'session name' -n 'window name'
+</code></pre>
+
+<ul>
+<li>Edit Window name</li>
+<li>
+<p><code>^b ,</code></p>
+</li>
+<li>
+<p>Terminate Window</p>
+</li>
+<li><code>^b &amp;</code></li>
+<li>
+<p><code>^d</code> in pane</p>
+</li>
+<li>
+<p>Move to window space</p>
+</li>
+<li><code>^b &lt;number&gt;</code> </li>
+<li><code>^b n</code> : next window</li>
+<li><code>^b p</code> : previous window</li>
+<li><code>^b l</code> : last window</li>
+<li><code>^b w</code> : window selector</li>
+<li><code>^b f</code> : find by name </li>
+</ul>
+<h2 id="pane">Pane</h2>
+<ul>
+<li>Divide pane</li>
+<li><code>^b %</code> : vertical</li>
+<li>
+<p><code>^b "</code> : horizontal</p>
+</li>
+<li>
+<p>Move to pane space</p>
+</li>
+<li>`^b q<number></li>
+<li><code>^b o</code> : 순서대로</li>
+<li>
+<p>`^b <arrow> : 방향키로 선택</p>
+</li>
+<li>
+<p>Delete pane</p>
+</li>
+<li><code>^b x</code></li>
+<li>
+<p><code>^d</code> in pane</p>
+</li>
+<li>
+<p>Adjust size fo pane</p>
+</li>
+<li><code>^b :</code> resize-pane</li>
+<li>
+<p><code>-[L|R|D|U] 'size'</code></p>
+</li>
+<li>
+<p>Modify Layout</p>
+</li>
+<li><code>^b &lt;space&gt;</code></li>
+</ul>
+<h2 id="link">Link</h2>
+<ol>
+<li><a href="https://edykim.com/ko/post/tmux-introductory-series-summary/">tmux 입문자 시리즈 요약</a></li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

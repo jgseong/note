@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Dgst - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Dgst";
+    var mkdocs_page_input_path = "openssl/cli/dgst.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../tips/">Tips</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Dgst</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TITLE: Digest -->
+
+<!-- SUBTITLE: A quick summary of digest message by using openssl -->
+
+<h1 id="message-digest">Message Digest</h1>
+<h2 id="dgst">dgst 명령</h2>
+<ul>
+<li>해시(Hash), 메시지 다이제스트(Message Digest)</li>
+<li>HMAC(Hashed MAC)</li>
+<li>서명(Sign) 및 검증(Verify)</li>
+<li>Default 입/출력은 stdin/stdout (파일 미지정 시), hex 출력 : default</li>
+<li><code>dgst</code> 가 아닌 sha, sha1, ... 등 특정 알고리즘으로 사용 가능, (<code>man</code> 참고)</li>
+<li>지원하는 알고리즘 목록은 <code>openssl list-message-digest-algorithms</code>로 확인 가능</li>
+<li>사용하는 <code>algorithm</code>은 <code>openssl dgst -help</code> (또는 <code>man</code> 참고)</li>
+<li>사용되는 입력 파일, '<code>infiles</code> ...'는 명령문 마지막에 위치해야 함</li>
+<li>
+<p><code>man dgst</code> 참고</p>
+<blockquote>
+<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
+openssl dgst  'algorithm' [-hmac 'key']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-sign 'key file']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infiles ...']
+...</p>
+</blockquote>
+</li>
+<li>
+<p>Options are</p>
+</li>
+</ul>
+<pre><code class="bash">-c              to output the digest with separating colons
+-r              to output the digest in coreutils format
+-d              to output debug info
+-hex            output as hex dump
+-binary         output in binary form
+-hmac arg       set the HMAC key to arg
+-non-fips-allow allow use of non FIPS digest
+-sign   file    sign digest using private key in file
+-verify file    verify a signature using public key in file
+-prverify file  verify a signature using private key in file
+-keyform arg    key file format (PEM or ENGINE)
+-out filename   output to filename rather than stdout
+-signature file signature to verify
+-sigopt nm:v    signature parameter
+-hmac key       create hashed MAC with key
+-mac algorithm  create MAC (not neccessarily HMAC)
+-macopt nm:v    MAC algorithm parameters or key
+-engine e       use engine e, possibly a hardware device.
+-gost-mac       to use the gost-mac message digest algorithm
+-md_gost94      to use the md_gost94 message digest algorithm
+-md4            to use the md4 message digest algorithm
+-md5            to use the md5 message digest algorithm
+-mdc2           to use the mdc2 message digest algorithm
+-ripemd160      to use the ripemd160 message digest algorithm
+-sha            to use the sha message digest algorithm
+-sha1           to use the sha1 message digest algorithm
+-sha224         to use the sha224 message digest algorithm
+-sha256         to use the sha256 message digest algorithm
+-sha384         to use the sha384 message digest algorithm
+-sha512         to use the sha512 message digest algorithm
+-whirlpool      to use the whirlpool message digest algorithm
+</code></pre>
+
+<h2 id="hash">해시(hash)</h2>
+<ul>
+<li>메시지 다이제스트</li>
+<li>각 파일에 대한 해시 값을 출력, 3개 파일이 입력이면 3개의 해시 값 출력</li>
+<li><code>-binary</code>와 <code>-hex</code>는 베타적으로 사용<blockquote>
+<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="bash"># e.g.1
+openssl dgst -sha256 -out text.md text.txt
+
+# e.g.2
+openssl sha256 -hex text.txt text2.txt text3.txt
+
+# output example for e.g.2
+SHA256(text.txt)= a5532c7f2c9a18ae3976a91eddf93faf7f6ed1653fe7bf73daee1eddfc999577
+SHA256(text2.txt)= 6be9867ae05e7505fb9bf3d59cfd2af13337fc17915cdeb099286b082f85bb39
+SHA256(text3.txt)= a4c6d0d073ff1c3405bcd49d96d8c5dc3f4905402e254ffe725c55f8746e0aec
+
+# e.g.3
+openssl dgst -sha256 -binary -out text.md text.txt 
+
+# output example for e.g.3
+hexdump text.md
+0000000 53a5 7f2c 9a2c ae18 7639 1ea9 f9dd af3f
+0000010 6e7f 65d1 e73f 73bf eeda dd1e 99fc 7795
+0000020
+</code></pre>
+
+<h2 id="hmac">HMAC</h2>
+<ul>
+<li>키(key) 가 필요</li>
+<li>'key' 는 hex 값<blockquote>
+<p>openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="bash">openssl dgst -sha256 -hmac &quot;hmackey1234&quot; -out text.hmac text.txt
+</code></pre>
+
+<h2 id="_1">서명 및 검증</h2>
+<ul>
+<li>키 파일(.pem, .key, ...)이 필요, 키 쌍 또는 개인 키</li>
+<li>Default key encoding is PEM </li>
+<li><a href="./openssl/cli/keygen#ec-key-pair">EC key pair 생성</a> 참고</li>
+<li>바이너리(binary) 로 출력, dafault</li>
+</ul>
+<h3 id="sign">서명(sign)</h3>
+<blockquote>
+<p>openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']</p>
+</blockquote>
+<h3 id="verify">검증(verify)</h3>
+<blockquote>
+<p>openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'</p>
+</blockquote>
+<ul>
+<li>Example output for signing message(or file)</li>
+</ul>
+<pre><code class="bash"># 서명 예)
+openssl dgst -sha224 -binary -out text.md text.txt
+openssl dgst -sha224 -sign ecprivkey.pem -out text.sign text.md
+</code></pre>
+
+<ul>
+<li>Example output for verifying signature</li>
+</ul>
+<pre><code class="bash"># 검증 예1) 공개 키로 검증
+$ openssl dgst -sha224 -verify ecpubkey.pem -signature text.sign text.md
+Verified OK
+
+# 검증 예2) 개인 키로 검증
+$ openssl dgst -sha224 -prverify ecprivkey.pem -signature text.sign text.md
+Verified OK
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+
+</body>
+</html>

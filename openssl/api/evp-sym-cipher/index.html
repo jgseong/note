@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Evp sym cipher - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Evp sym cipher";
+    var mkdocs_page_input_path = "openssl/api/evp-sym-cipher.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../../tips/">Tips</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Evp sym cipher</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <!-- TITLE: Symmetric Key Cipher with EVP -->
+
+<!-- SUBTITLE: A quick summary of API to use symmetric key cipher with EVP -->
+
+<h1 id="about-evp">About EVP</h1>
+<ul>
+<li>Perhaps, EVP stands for Envelope.</li>
+<li>High-level Cryptographic Functions.</li>
+<li>다양한 OpenSSL의 암호 API를 하나의 인터페이스(interface)로 구성.</li>
+<li>The EVP interface, which can be accessed by including <code>penssl/evp.h</code></li>
+</ul>
+<h1 id="about-ctxcontext">About CTX(Context)</h1>
+<ul>
+<li>EVP로 Encryption, Decryption 등, 각 수행에 필요하거나 변경되는 정보들을 유지하는 구조체.</li>
+<li>암호화 알고리즘, 키(key) 값, IV(initialization vector) 값, padding 설정 등...</li>
+<li>대칭키 암호에서 <code>EVP_CIPHER_CTX</code> 구조체를 사용.</li>
+</ul>
+<h1 id="evp-cipher-apis">EVP Cipher APIs</h1>
+<ul>
+<li>EVP 사용 시 여러 암호 알고리즘을 동일한 루틴(routine)으로 사용 가능.</li>
+<li>실질적으로 데이터를 암호/복호화하는 함수.<ul>
+<li><code>EVP_EncryptUpdate()</code>, <code>EVP_DecryptUpdate()</code>, <code>EVP_CipherUpdate()</code>, ...</li>
+</ul>
+</li>
+<li>접미사 <code>_ex</code>가 붙는 함수는 암호 알고리즘에 따라 추가적인 설정이 가능.</li>
+<li>암호/복호화의 동작 루틴은 동일하고 사용되는 함수명만 다름.</li>
+<li>APIs</li>
+<li><code>man EVP_CIPHER_CTX_init</code></li>
+<li>헤더(header) 파일</li>
+<li><code>#include &lt;openssl/evp.h&gt;</code></li>
+</ul>
+<h2 id="evp_cipher_ctx">EVP_CIPHER_CTX 구조체</h2>
+<pre><code class="c">struct evp_cipher_ctx_st{
+  const EVP_CIPHER *cipher; 
+  ENGINE *engine;           /* functional reference if 'cipher' is ENGINE-provided */
+  int encrypt;              /* encrypt or decrypt */
+  int buf_len;              /* number we have left */
+  unsigned char ovi[EVP_MAX_IV_LENGTH];  /* original iv */
+  unsigned char iv[EVP_MAX_IV_LENGTH];   /* working iv */
+  unsigned char buf[EVP_MAX_BLOCK_LENGTH];  /* saved partial block */
+  int num;                   /* used by cfb/ofb/ctr mode */
+  void *app_data;            /* application stuff */
+  int key_len;               /* May change for variable length cipher */
+  unsigned long flags;       /* Various flags */
+  void *cipher_data;         /* per EVP data */
+  int final_used;
+  unsigned char final[EVP_MAX_BLOCK_LENGTH]; /* possible final block */
+} /* EVP_CIPHER_CTX */ ;
+</code></pre>
+
+<h2 id="ctx">CTX 초기화</h2>
+<h3 id="evp_cipher_ctx_init">EVP_CIPHER_CTX_init</h3>
+<pre><code class="c">void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *ctx);
+</code></pre>
+
+<ul>
+<li>cipher context를 초기화.</li>
+<li><code>ctx</code> : cipher context의 주소.</li>
+</ul>
+<h2 id="evp-init">EVP 암호/복호화 초기 설정 - Init()</h2>
+<pre><code class="c">int EVP_EncryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
+int EVP_DecryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
+int EVP_CipherInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv, int enc);
+int EVP_EncryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, ENGINE *impl, unsigned char *key, unsigned char *iv);
+int EVP_DecryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, ENGINE *impl, unsigned char *key, unsigned char *iv);
+int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, ENGINE *impl, unsigned char *key, unsigned char *iv, int enc);
+</code></pre>
+
+<ul>
+<li>암호/복호화 하기 위한 초기 설정.</li>
+<li>성공시 <code>1</code>, 실패시 <code>0</code> 리턴.</li>
+<li><code>ctx</code> : 사용되는 cipher context.</li>
+<li><code>type</code> : 암호화 알고리즘(cipher)
+    e.g. <code>EVP_des_ecb()</code>, <code>EVP_aes_128_cbc()</code>, ... 등의 리턴 값.</li>
+<li><code>key</code> : binary key 값, 암호 알고리즘에 따라 길이가 잘림.</li>
+<li><code>iv</code> : binary iv 값, 암호 알고리즘에 따라 길이가 잘림, ECB mode에서는 <code>NULL</code>로 설정, 값이 있더라도 사용되지 않음.</li>
+<li><code>enc</code> : 암호/복호화 flag, <code>1</code>이면 <strong>암호화</strong>, <code>0</code>이면 <strong>복호화</strong>.</li>
+</ul>
+<h2 id="evp-update">EVP 암호/복호화 수행 - Update()</h2>
+<pre><code class="c">int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
+int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
+int EVP_CipherUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
+</code></pre>
+
+<ul>
+<li>실질적으로 데이터를 암호/복호화.</li>
+<li>성공시 <code>1</code>, 실패시 <code>0</code> 리턴.</li>
+<li>block size가 맞지 않으면, <code>Final()</code>,<code>Final_ex()</code>에서 처리. (ECB/CBC mode처럼 block cipher인 경우)</li>
+<li><code>outl</code>은 암호/복호화에 성공한 바이트 크기를 나타냄, 즉 암호/복호화가 성공한 바이트 크기.</li>
+<li><code>ctx</code> : 사용되는 cipher context.</li>
+<li><code>out</code> : 암호/복호화된 데이터가 저장될 버퍼.</li>
+<li><code>outl</code> : <code>out</code>의 길이가 저장될 변수, 암호/복호화된 데이터의 길이.</li>
+<li><code>in</code> : 입력 데이터, 암호화시 평문, 복호화시 암호문.</li>
+<li><code>inl</code> : <code>in</code>의 길이</li>
+</ul>
+<h2 id="evp-final">EVP 암호/복호화 수행 - Final()</h2>
+<pre><code class="c">int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+int EVP_DecryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+int EVP_CipherFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
+</code></pre>
+
+<ul>
+<li>패딩 및 필요한 작업을 처리</li>
+<li>성공시 1, 실패시 0 리턴.</li>
+<li>block size가 맞지 않아 Update()에서 처리가 안된 데이터를 처리. (ECB/CBC mode처럼 block cipher인 경우)</li>
+<li>ECB/CBC mode에서 암호화시 패딩(padding)이 추가, 복호화시 패딩이 제거.</li>
+<li><code>ctx</code> : 사용되는 cipher context.</li>
+<li><code>out</code> : 암호/복호화된 데이터가 저장될 버퍼</li>
+<li><code>outl</code> : <code>out</code>의 길이가 저장될 변수</li>
+</ul>
+<h1 id="useful-apis">Useful APIs</h1>
+<h2 id="evp_cipher_ctx_set_padding">EVP_CIPHER_CTX_set_padding</h2>
+<pre><code class="c">int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int padding);
+</code></pre>
+
+<ul>
+<li>패딩(padding) 사용 유무를 결정.</li>
+<li>항상 <code>1</code> 리턴.</li>
+<li><strong>ECB/CBC mode</strong>에서 사용.</li>
+<li><code>padding</code> : <code>1</code>이면 on, <code>0</code>이면 off.</li>
+</ul>
+<h2 id="evp_cipher_ctx_set_key_length">EVP_CIPHER_CTX_set_key_length</h2>
+<pre><code class="c">int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int keylen);
+</code></pre>
+
+<ul>
+<li><code>ctx</code>의 key 길이를 설정.</li>
+<li>항상 1 리턴.</li>
+<li>cipher에 따라 가변적인 key 길이 설정 가능.</li>
+<li><code>keylen</code> : 바이트 단위의 key 길이.</li>
+</ul>
+<h2 id="evp_cipher_ctx_ctrl">EVP_CIPHER_CTX_ctrl</h2>
+<pre><code class="c">int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
+</code></pre>
+
+<ul>
+<li>cipher에 관련된 설정 파라미터(configurable parameters)를 설정 가능.</li>
+<li>Linux system call의 <code>fctrl()</code>와 유사.</li>
+<li><code>type</code> : 암호 알고리즘에 따라 설정 가능한 값, refer to "openssl/evp.h"
+    e.g. EVP_CTRL_GET_RC2_KEY_BITS, EVP_CTRL_SET_RC2_KEY_BITS, EVP_CTRL_GET_RC5_ROUNDS, EVP_CTRL_SET_RC5_ROUNDS, ... 등.</li>
+<li><code>arg</code> : 파라미터(정수형), <code>type</code>에 따라 용도가 달라짐.</li>
+<li><code>ptr</code> : 파라미터(정수형), 읽을/저장될 변수의 주소 등으로 사용 가능, type에 따라 용도가 달라짐.</li>
+</ul>
+<h2 id="evp_cipher_ctx_cleanup">EVP_CIPHER_CTX_cleanup</h2>
+<pre><code class="c">int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *ctx);
+</code></pre>
+
+<ul>
+<li><code>ctx</code>의 내용을 삭제.</li>
+</ul>
+<h2 id="evp_get_cipherbyname">EVP_get_cipherbyname</h2>
+<pre><code class="c">const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
+</code></pre>
+
+<ul>
+<li><code>name</code>에 해당하는 EVP_CIPHER 구조체를 리턴.</li>
+<li><code>OpenSSL_add_all_ciphers()</code>를 먼저 호출해야 사용 가능.</li>
+<li><code>name</code> : cipher 이름, refer to "man enc"
+    e.g. <code>des-ecb</code>, <code>aes-128-ecb</code>, <code>aes-192-cbc</code>, <code>...</code>.</li>
+</ul>
+<h1 id="evp-macros-and-others">EVP macros and others.</h1>
+<h2 id="how-to-check-that-padding-is-disable">How to check that <code>padding</code> is disable</h2>
+<pre><code class="c">int pad=(ctx-&gt;flags&amp;EVP_CIPH_NO_PADDING);
+</code></pre>
+
+<h2 id="evp_get_cipherbynidobj">EVP_get_cipherbynid/obj</h2>
+<pre><code class="c">// a : integer
+#define EVP_get_cipherbynid(a) EVP_get_cipherbyname(OBJ_nid2sn(a))
+#define EVP_get_cipherbyobj(a) EVP_get_cipherbynid(OBJ_obj2nid(a))
+</code></pre>
+
+<h2 id="get-an-attributes-from-evp_cipher">Get an attributes from EVP_CIPHER</h2>
+<pre><code class="c">// e : const EVP_CIPHER*
+#define EVP_CIPHER_nid(e)              ((e)-&gt;nid)
+#define EVP_CIPHER_block_size(e)       ((e)-&gt;block_size)
+#define EVP_CIPHER_key_length(e)       ((e)-&gt;key_len)
+#define EVP_CIPHER_iv_length(e)        ((e)-&gt;iv_len)
+#define EVP_CIPHER_flags(e)            ((e)-&gt;flags)
+#define EVP_CIPHER_mode(e)             ((e)-&gt;flags) &amp; EVP_CIPH_MODE)
+int EVP_CIPHER_type(const EVP_CIPHER *ctx);
+</code></pre>
+
+<h2 id="get-an-attributes-from-evp_cipher_ctx">Get an attributes from EVP_CIPHER_CTX</h2>
+<pre><code class="c">// e : EVP_CIPHER_CTX*
+#define EVP_CIPHER_CTX_cipher(e)       ((e)-&gt;cipher)  // get cipher object
+#define EVP_CIPHER_CTX_nid(e)          ((e)-&gt;cipher-&gt;nid)  // get cipher nid
+#define EVP_CIPHER_CTX_block_size(e)   ((e)-&gt;cipher-&gt;block_size)  // get cipher block size
+#define EVP_CIPHER_CTX_key_length(e)   ((e)-&gt;key_len)  // get cipher key length
+#define EVP_CIPHER_CTX_iv_length(e)    ((e)-&gt;cipher-&gt;iv_len)  // get cipher IV length
+#define EVP_CIPHER_CTX_get_app_data(e) ((e)-&gt;app_data)
+#define EVP_CIPHER_CTX_set_app_data(e,d) ((e)-&gt;app_data=(char *)(d))
+#define EVP_CIPHER_CTX_type(c)         EVP_CIPHER_type(EVP_CIPHER_CTX_cipher(c))  // get cipher type
+#define EVP_CIPHER_CTX_flags(e)        ((e)-&gt;cipher-&gt;flags)  // get flags
+#define EVP_CIPHER_CTX_mode(e)         ((e)-&gt;cipher-&gt;flags &amp; EVP_CIPH_MODE)  // get mode
+</code></pre>
+
+<h2 id="convert-for-asn1">Convert for ASN.1</h2>
+<pre><code class="c">int EVP_CIPHER_param_to_asn1(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
+int EVP_CIPHER_asn1_to_param(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
+</code></pre>
+
+<h1 id="evp">EVP 암호/복호화 과정</h1>
+<h2 id="example-code-for-do_crypt">Example code for <code>do_crypt</code></h2>
+<pre><code class="c">do_crypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher,
+        const unsigned char *key, const unsigned char *iv/*, int enc*/) // enc는 EVP_Cipher~()에서 사용
+{
+  int inLen, outLen;
+  unsigned char inBuf[BUFSIZ], outBuf[BUFSIZ+EVP_MAX_BLOCK_LENGTH];
+// inBuf 크기는 cipher에 따라 block size의 배수.
+// outBuf 크기는 inBuf보다 추가적인 block size를 더 가잠. (padding 등의 이유)
+// block cipher인 ECB/CBC mode에서 적용되는 사항 (CBC만 IV 필요)
+// stream cipher인OFB/CFB/CTR에서는 plaintext와 ciphertext의 크기가 같음. (단, IV가 필요)
+  EVP_CIPHER_CTX ctx;
+
+// 1. context 초기화
+  EVP_CIPHER_CTX_init(&amp;ctx);
+
+// 2. 암호/복호화 초기 설정
+  EVP_EncryptInit_ex(&amp;ctx, cipher, NULL, key, iv); // encrypt
+//EVP_DecryptInit_ex(&amp;ctx, cipher, NULL, key, iv); // decrypt
+//EVP_CipherInit_ex(&amp;ctx, cipher, NULL, key, iv, enc); // enc=1 : encrypt, enc=0 : decrypt 
+
+// 3. 데이터 암호/복호화
+  while((inLen=fread(inBuf, 1, sizeof(inBuf), inFp))&gt;0)
+  {
+    EVP_EncryptUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen);
+//  EVP_DecryptUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen);
+//  EVP_CipherUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen);
+    fwrite(outBuf, 1, outLen, outFp);
+  }
+
+// 4. 암호화 마지막 처리, e.g. 패딩 처리
+  EVP_EncryptFinal_ex(&amp;ctx, outBuf, &amp;outLen);
+//EVP_DecryptFinal_ex(&amp;ctx, outBuf, &amp;outLen);
+//EVP_CipherFinal_ex(&amp;ctx, outBuf, &amp;outLen);
+  fwrite(outBuf, 1, outLen, outFp);
+
+  EVP_CIPHER_CTX_cleanup(&amp;ctx);
+}
+</code></pre>
+
+<h2 id="example-1-using-evp_encryptdecrypt">Example 1 - using EVP_Encrypt/Decrypt~()</h2>
+<pre><code class="c">/* enc.c */
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;openssl/evp.h&gt;
+#include &lt;openssl/rand.h&gt;
+#include &lt;getopt.h&gt;
+
+#define PrintfErrorExit(x, ...) { fprintf(stderr, __VA_ARGS__); exit(x); }
+
+int encrypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher, 
+        const unsigned char *key, const unsigned char *iv)
+{
+    int inLen, outLen;      // inLen:입력된 데이터의 길이, outLen:출력된 데이터의 길이
+    char inBuf[BUFSIZ], outBuf[BUFSIZ+EVP_MAX_BLOCK_LENGTH];    // inBuf:입력 데이터 버퍼, outBuf:출력 데이터 버퍼
+    EVP_CIPHER_CTX ctx;     // 암호화 수행에 사용할 context
+
+    // 1. context 초기화
+    EVP_CIPHER_CTX_init(&amp;ctx);
+
+    // 2. 암호화 초기 설정.
+    // - context, 암호 알고리즘, 키 값, IV 값 설정
+    EVP_EncryptInit_ex(&amp;ctx, cipher, NULL, key, iv);
+
+    // 3. 데이터 암호화
+    while((inLen=fread(inBuf, 1, sizeof(inBuf), inFp))&gt;0)       // 입력 파일에서 BUFSIZ만큼 데이터를 read
+    {
+        if(!EVP_EncryptUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen))     // read된 데이터를 암호화
+        {
+            printf(&quot;EVP_EncryptUpdate() error.\n&quot;);
+            EVP_CIPHER_CTX_cleanup(&amp;ctx);
+            return -1;
+        }
+        fwrite(outBuf, 1, outLen, outFp);       // 출력 파일에 암호화된 데이터를 write
+    }
+
+    // 4. 암호화의 마지막 처리, e.g. 패딩 처리
+    if(!EVP_EncryptFinal_ex(&amp;ctx, outBuf, &amp;outLen))     
+    {
+        printf(&quot;EVP_EncryptFinal_ex() error.\n&quot;);
+        EVP_CIPHER_CTX_cleanup(&amp;ctx);
+        return -2;
+    }
+    fwrite(outBuf, 1, outLen, outFp);           // 출력 파일에 마지막으로 암호화된(패딩 처리된) 데이터를 write
+
+    EVP_CIPHER_CTX_cleanup(&amp;ctx);           // context 초기화
+    return 0;
+}
+
+int decrypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher,
+        const unsigned char *key, const unsigned char *iv)
+{
+    int inLen, outLen;
+    char inBuf[BUFSIZ], outBuf[BUFSIZ+EVP_MAX_BLOCK_LENGTH];
+    EVP_CIPHER_CTX ctx;     // 복호화 수행에 사용할 context
+
+    // 1. context 초기화
+    EVP_CIPHER_CTX_init(&amp;ctx);
+
+    // 2. 복호화 초기 설정.
+    // - context, 암호 알고리즘, 키 값, IV 값 설정
+    EVP_DecryptInit_ex(&amp;ctx, cipher, NULL, key, iv);
+
+    // 3. 데이터 복호화
+    while((inLen=fread(inBuf, 1, sizeof(inBuf), inFp))&gt;0)   // 입력 파일에서 BUFSIZ만큼 데이터를 read
+    {
+        if(!EVP_DecryptUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen))     // read된 데이터를 복호화, 실패 시 0 리턴
+        {
+            printf(&quot;EVP_DecryptUpdate() error.\n&quot;);
+            EVP_CIPHER_CTX_cleanup(&amp;ctx);
+            return -1;
+        }
+        fwrite(outBuf, 1, outLen, outFp);       // 출력 파일에 복호화된 데이터를 write
+    }
+
+    // 4. 복호화의 마지막 처리, e.g. 패딩 처리
+    if(!EVP_DecryptFinal_ex(&amp;ctx, outBuf, &amp;outLen))
+    {
+        printf(&quot;EVP_DecryptFinal_ex() error.\n&quot;);
+        EVP_CIPHER_CTX_cleanup(&amp;ctx);
+        return -2;
+    }
+    fwrite(outBuf, 1, outLen, outFp);       // 출력 파일에 마지막으로 복호화된(패딩 처리된) 데이터를 write
+
+    EVP_CIPHER_CTX_cleanup(&amp;ctx);
+    return 0;
+}
+
+void printhex(const char *prefix, const unsigned char *s, const int sLen)
+{
+    int i;
+    printf(&quot;%s[%d]:\n&quot;, prefix, sLen);
+    printf(&quot;%02X&quot;, s[0]);
+    for(i=1; i&lt;sLen; i++)
+        printf(&quot;:%02X&quot;, s[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(int argc, char **argv)
+{
+    FILE *inFp, *outFp;                                         // 입출력 파일의 파일 포인터
+    int opt;                                                    // 옵션 문자
+    int keyLen, ivLen;                                          // 입력된 key 값, iv 값
+    unsigned char key[EVP_MAX_KEY_LENGTH];                      // key 버퍼
+    unsigned char iv[EVP_MAX_IV_LENGTH];                        // iv 버퍼
+    const EVP_CIPHER *cipher=EVP_enc_null();                    // 암호 알고리즘
+    int (*crypt)(FILE*, FILE*, const EVP_CIPHER*,               // 함수 포인터
+            const unsigned char*, const unsigned char *);       
+
+    if(argc!=4 || (opt=getopt(argc, argv, &quot;ed&quot;))==-1)
+        PrintfErrorExit(2, &quot;Usage: %s -e|d &lt;inFile&gt; &lt;outFile&gt;\n&quot;, argv[0]);
+
+
+    switch(opt)
+    {
+        case 'e':   // encrypt
+            crypt=encrypt;
+            break;
+        case 'd':   // decrypt
+            crypt=decrypt;
+            break;
+        case '?':
+        default:
+            PrintfErrorExit(3, &quot;Usage: %s -e|d &lt;inFile&gt; &lt;outFile&gt;\n&quot;, argv[0]);
+    }
+
+    if((inFp=fopen(argv[2], &quot;rb&quot;))==NULL)
+        PrintfErrorExit(4, &quot;fopen(\&quot;%s\&quot;) error.\n&quot;, argv[1]);
+
+    if((outFp=fopen(argv[3], &quot;wb&quot;))==NULL)
+        PrintfErrorExit(5, &quot;fopen(\&quot;%s\&quot;) error.\n&quot;, argv[2]);
+
+    OpenSSL_add_all_ciphers();      // EVP_get_cipherbyname()을 사용하기 위해 호출.
+    cipher=EVP_get_cipherbyname(&quot;aes-128-cbc&quot;);
+
+    memcpy(key, &quot;password01234567&quot;, keyLen=EVP_CIPHER_key_length(cipher));
+    memcpy(iv, &quot;01234567&quot;, ivLen=EVP_CIPHER_iv_length(cipher));
+    printhex(&quot;key&quot;, key, keyLen);
+    printhex(&quot;iv&quot;, iv, ivLen);
+
+    if(crypt(inFp, outFp, cipher, key, iv)&lt;0)
+        exit(6);
+
+    fclose(inFp);
+    fclose(outFp);
+
+    exit(0);
+}
+</code></pre>
+
+<h2 id="example-2-using-evp_cipher">Example 2 - using EVP_Cipher~()</h2>
+<pre><code class="c">/* enc2.c */
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;openssl/evp.h&gt;
+#include &lt;openssl/rand.h&gt;
+#include &lt;getopt.h&gt;
+
+#define PrintfErrorExit(x, ...) { fprintf(stderr, __VA_ARGS__); exit(x); }
+
+int do_crypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher, 
+        const unsigned char *key, const unsigned char *iv, int enc)
+{
+    int inLen, outLen;      // inLen:입력된 데이터의 길이, outLen:출력된 데이터의 길이
+    char inBuf[BUFSIZ], outBuf[BUFSIZ+EVP_MAX_BLOCK_LENGTH];    // inBuf:입력 데이터 버퍼, outBuf:출력 데이터 버퍼
+    EVP_CIPHER_CTX ctx;     // 암호/복호화 수행에 사용할 context
+
+    // 1. context 초기화
+    EVP_CIPHER_CTX_init(&amp;ctx);
+
+    // 2. 암호/복호화 초기 설정.
+    // - context, 암호 알고리즘, 키 값, IV 값 설정
+    EVP_CipherInit_ex(&amp;ctx, cipher, NULL, key, iv, enc);
+
+    // 3. 데이터 암호화
+    while((inLen=fread(inBuf, 1, sizeof(inBuf), inFp))&gt;0)       // 입력 파일에서 BUFSIZ만큼 데이터를 read
+    {
+        if(!EVP_CipherUpdate(&amp;ctx, outBuf, &amp;outLen, inBuf, inLen))      // read된 데이터를 암호/복호화
+        {
+            printf(&quot;EVP_EncryptUpdate() error.\n&quot;);
+            EVP_CIPHER_CTX_cleanup(&amp;ctx);
+            return -1;
+        }
+        fwrite(outBuf, 1, outLen, outFp);       // 출력 파일에 암호/복호화된 데이터를 write
+    }
+
+    // 4. 암호/복호화의 마지막 처리, e.g. 패딩 처리
+    if(!EVP_CipherFinal_ex(&amp;ctx, outBuf, &amp;outLen))      
+    {
+        printf(&quot;EVP_EncryptFinal_ex() error.\n&quot;);
+        EVP_CIPHER_CTX_cleanup(&amp;ctx);
+        return -2;
+    }
+    fwrite(outBuf, 1, outLen, outFp);           // 출력 파일에 마지막으로 암호/복호화된(패딩 처리된) 데이터를 write
+
+    EVP_CIPHER_CTX_cleanup(&amp;ctx);           // context 초기화
+    return 0;
+}
+
+void printhex(const char *prefix, const unsigned char *s, const int sLen)
+{
+    int i;
+    printf(&quot;%s[%d]:\n&quot;, prefix, sLen);
+    printf(&quot;%02X&quot;, s[0]);
+    for(i=1; i&lt;sLen; i++)
+        printf(&quot;:%02X&quot;, s[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(int argc, char **argv)
+{
+    FILE *inFp, *outFp;                                         // 입출력 파일의 파일 포인터
+    int opt, enc;                                               // 옵션 문자, 암호/복호화 flag
+    int keyLen, ivLen;                                          // 입력된 key 값, iv 값
+    unsigned char key[EVP_MAX_KEY_LENGTH];                      // key 버퍼
+    unsigned char iv[EVP_MAX_IV_LENGTH];                        // iv 버퍼
+    const EVP_CIPHER *cipher=EVP_enc_null();                    // 암호 알고리즘
+    int (*crypt)(FILE*, FILE*, const EVP_CIPHER*,               // 함수 포인터
+            const unsigned char*, const unsigned char *);       
+
+    if(argc!=4 || (opt=getopt(argc, argv, &quot;ed&quot;))==-1)
+        PrintfErrorExit(2, &quot;Usage: %s -e|d &lt;inFile&gt; &lt;outFile&gt;\n&quot;, argv[0]);
+
+
+    switch(opt)
+    {
+        case 'e':   // encrypt
+            enc=1;
+            break;
+        case 'd':   // decrypt
+            enc=0;
+            break;
+        case '?':
+        default:
+            PrintfErrorExit(3, &quot;Usage: %s -e|d &lt;inFile&gt; &lt;outFile&gt;\n&quot;, argv[0]);
+    }
+
+    if((inFp=fopen(argv[2], &quot;rb&quot;))==NULL)
+        PrintfErrorExit(4, &quot;fopen(\&quot;%s\&quot;) error.\n&quot;, argv[1]);
+
+    if((outFp=fopen(argv[3], &quot;wb&quot;))==NULL)
+        PrintfErrorExit(5, &quot;fopen(\&quot;%s\&quot;) error.\n&quot;, argv[2]);
+
+    OpenSSL_add_all_ciphers();      // EVP_get_cipherbyname()을 사용하기 위해 호출.
+    cipher=EVP_get_cipherbyname(&quot;aes-128-cbc&quot;);
+
+    memcpy(key, &quot;password01234567&quot;, keyLen=EVP_CIPHER_key_length(cipher));
+    memcpy(iv, &quot;01234567&quot;, ivLen=EVP_CIPHER_iv_length(cipher));
+    printhex(&quot;key&quot;, key, keyLen);
+    printhex(&quot;iv&quot;, iv, ivLen);
+
+    if(do_crypt(inFp, outFp, cipher, key, iv, enc)&lt;0)
+        exit(6);
+
+    fclose(inFp);
+    fclose(outFp);
+
+    exit(0);
+}
+</code></pre>
+
+<h2 id="example">Example 결과</h2>
+<pre><code class="bash">$ gcc enc.c -lcrypto
+$ cat -v data.txt
+OpenSSL EVP Symmetric Key Cipher APIs
+$ ./a.out -e data.txt data.bin
+key[16]:
+70:61:73:73:77:6F:72:64:30:31:32:33:34:35:36:37
+iv[16]:
+30:31:32:33:34:35:36:37:00:6B:65:79:00:69:76:00
+$ cat -v data.bin &amp;&amp; echo
+A&quot;M-3M-FM-rM-d^_bE.&amp;FdM-T-M-&lt;^G^HdM-#M-VM-^F^SM-^H4&lt;EM-gM-\i^EM-}M-&lt;qfe0M-^F]M-H@M-9BM-'M-1&quot;M-,(
+$ ./a.out -d data.bin data.out
+key[16]:
+70:61:73:73:77:6F:72:64:30:31:32:33:34:35:36:37
+iv[16]:
+30:31:32:33:34:35:36:37:00:6B:65:79:00:69:76:00
+$ cat -v data.out
+OpenSSL EVP Symmetric Key Cipher APIs
+$
+</code></pre>
+
+<h1 id="reference">Reference</h1>
+<ol>
+<li>OpenSSL을 이용한 보안 프로그래밍 / <a href="http://network.hanbat.ac.kr">네트워크연구실</a> </li>
+<li><a href="https://www.openssl.org">OpenSSL Official Site</a></li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+
+</body>
+</html>
