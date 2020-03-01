@@ -15,6 +15,7 @@ COPY config /home/${USER}/.ssh/config
 COPY priv.key /home/${USER}/.ssh/priv.key
 
 USER root
+RUN chown ${USER}:${USER} -R /home/${USER}/.ssh
 RUN chmod 0400 /home/${USER}/.ssh/config
 RUN chmod 0400 /home/${USER}/.ssh/priv.key
 
