@@ -29,7 +29,7 @@ if [ ${CNT} -eq 0 ]; then
     echo "No such ./Dockerfile"
     exit 1
   fi
-  docker build -u ${USER} -t ${IMG}:${TAG} .
+  docker build --build-arg USER=${USER} -t ${IMG}:${TAG} .
 fi
 
 docker run --rm -it -u ${USER} -v ${PWD}:/home/${USER}/docs ${IMG}:${TAG} mkdocs "$1"

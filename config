@@ -3,4 +3,4 @@ Host github.com gist.github.com
     IdentityFile ~/.ssh/priv.key
     SendEnv LANG LC_*
     HashKnownHosts yes
-    GSSAPIAuthentication yes
+    StrictHostKeyChecking no
