@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Common - Jgseong's Note</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Common";
+    var mkdocs_page_input_path = "tips/linux/common.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">APIs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../api/theory/">Theory</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../api/getopt/">getopt</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tools</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tools/tmux/">tmux</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Virt.</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../virt/docker/">Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../virt/qemu/">Qemu</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">OpenSSL</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../openssl/cli/digest/">CLI/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../openssl/cli/enc/">CLI/enc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../openssl/cli/ec/">CLI/ec</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../openssl/cli/pki/">CLI/PKI</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../openssl/api/evp-digest/">EVP/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../openssl/api/evp-sym-cipher/">EVP/Sym-Cipher</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Linux</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">Common</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#change-the-username">Change the Username</a></li>
+    
+
+    <li class="toctree-l3"><a href="#visudo">visudo</a></li>
+    
+
+    <li class="toctree-l3"><a href="#fix-perl-warning-about-the-locale-failed">Fix perl warning about the locale failed</a></li>
+    
+
+    <li class="toctree-l3"><a href="#grub-customizer">grub-customizer</a></li>
+    
+
+    <li class="toctree-l3"><a href="#remove-mbr-area">Remove MBR area</a></li>
+    
+
+    <li class="toctree-l3"><a href="#ntfs-mount-error">NTFS mount error</a></li>
+    
+
+    <li class="toctree-l3"><a href="#ssh-connection-by-public-key-authentication">SSH connection by public key authentication</a></li>
+    
+
+    <li class="toctree-l3"><a href="#wireshark">사용자 계정으로 wireshark 실행</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../desktop/">Desktop</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../vim/">Vim</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Windows</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../windows/common/">Common</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Jgseong's Note</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Tip/Linux &raquo;</li>
+        
+      
+    
+    <li>Common</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="change-the-username">Change the Username</h1>
+<blockquote>
+<p>Test on Ubuntu 16.04</p>
+</blockquote>
+<pre><code class="bash"># sudo passwd root # if any
+usermod -l &lt;newname&gt; -d /home/&lt;newname&gt; -m &lt;oldname&gt;
+groupmod -n &lt;newgroup&gt; &lt;oldgroup&gt; 
+# passwd -l root   # lock root account
+</code></pre>
+
+<ul>
+<li>example</li>
+</ul>
+<pre><code class="bash"># newname, newgroup=jgseong
+# oldname, oldgroup=ubuntu
+usermod -l jgseong -d /home/jgseong -m ubuntu
+groupmod -n jgseong ubuntu
+</code></pre>
+
+<h1 id="visudo">visudo</h1>
+<p><code>sudo</code> 권한 및 동작 설정</p>
+<pre><code class="bash">sudo visudo
+</code></pre>
+
+<ul>
+<li><code>/etc/sudoer</code> 파일 편집(문법 검사, 저장 가능)</li>
+<li>vim으로 편집 시 sudo EDITOR=vim visudo  (default: nano)</li>
+<li>
+<p><code>/etc/sudoers.d</code> 에 설정 파일 생성 후,  <code>includedir /etc/sudoers.d</code> 사용 가능 </p>
+</li>
+<li>
+<p>Default settings (on Ubuntu 16.04)</p>
+</li>
+</ul>
+<pre><code class="bash">#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin&quot;
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on &quot;#include&quot; directives:
+
+#includedir /etc/sudoers.d
+</code></pre>
+
+<p><strong>no-password for user</strong></p>
+<pre><code>jgseong   ALL=(ALL:ALL) NOPASSWD:ALL
+</code></pre>
+
+<p><strong>no-password for group</strong></p>
+<pre><code>%wheel ALL=(ALL) NOPASSWD:ALL
+</code></pre>
+
+<ul>
+<li>create wheel group / join user to wheel group</li>
+</ul>
+<pre><code class="bash">sudo addgroup wheel
+sudo addgroup ${USER} wheel
+</code></pre>
+
+<h1 id="fix-perl-warning-about-the-locale-failed">Fix perl warning about the locale failed</h1>
+<p>간혹 우분투 설치 후 발생하는 에러</p>
+<pre><code class="bash">perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+    LANGUAGE = (unset),
+    LC_ALL = (unset),
+    LC_PAPER = &quot;ko_KR.UTF-8&quot;,
+    LC_ADDRESS = &quot;ko_KR.UTF-8&quot;,
+    LC_MONETARY = &quot;ko_KR.UTF-8&quot;,
+    LC_NUMERIC = &quot;ko_KR.UTF-8&quot;,
+    LC_TELEPHONE = &quot;ko_KR.UTF-8&quot;,
+    LC_IDENTIFICATION = &quot;ko_KR.UTF-8&quot;,
+    LC_MEASUREMENT = &quot;ko_KR.UTF-8&quot;,
+    LC_TIME = &quot;ko_KR.UTF-8&quot;,
+    LC_NAME = &quot;ko_KR.UTF-8&quot;,
+    LANG = &quot;en_US.UTF-8&quot;
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale (&quot;en_US.UTF-8&quot;).
+</code></pre>
+
+<pre><code class="bash">sudo locale-gen
+sudo dpkg-reconfigure locales # locale 설정 후 OK, e.g) en_US.UTF-8
+Generating locales (this might take a while)...
+  en_AG.UTF-8... done
+  en_AU.UTF-8... done
+  en_BW.UTF-8... done
+  en_CA.UTF-8... done
+  en_DK.UTF-8... done
+  en_GB.UTF-8... done
+  en_HK.UTF-8... done
+  en_IE.UTF-8... done
+  en_IN.UTF-8... done
+  en_NG.UTF-8... done
+  en_NZ.UTF-8... done
+  en_PH.UTF-8... done
+  en_SG.UTF-8... done
+  en_US.UTF-8... done
+  en_ZA.UTF-8... done
+  en_ZM.UTF-8... done
+  en_ZW.UTF-8... done
+  ko_KR.EUC-KR... done
+  ko_KR.UTF-8... done
+Generation complete.
+</code></pre>
+
+<h1 id="grub-customizer">grub-customizer</h1>
+<ul>
+<li>GUI tools for GRUB bootloader</li>
+</ul>
+<pre><code class="bash">sudo add-apt-repository ppa:danielrichter2007/grub-customizer 
+sudo apt-get update 
+sudo apt-get install grub-customizer
+</code></pre>
+
+<h1 id="remove-mbr-area">Remove MBR area</h1>
+<ul>
+<li><em>fdisk</em> 또는 disk 관련 유틸(lsblk, sfdisk, parted, ...)을 통해 해당 디스크의 장치 파일을 파악</li>
+</ul>
+<pre><code class="bash"># assume disk is /dev/sda
+sudo dd if=/dev/zero of=/dev/sda bs=446 count=1
+</code></pre>
+
+<ul>
+<li>MBR 영역을 0으로 채움</li>
+<li>bs(block size), count : bs 크기를 count 만큼 수행</li>
+</ul>
+<h1 id="ntfs-mount-error">NTFS mount error</h1>
+<ul>
+<li><code>the disk contains an unclean file system (0 0) ...</code> 하면서, 어쩌고 저쩌고 에러 날때</li>
+<li>듀얼 부팅 또는 MBR을 잘못 건들였을 때, 나타나는 증상 </li>
+<li>내 환경 : Grub2(sdb1) - Windows10(sdb2), Linux Mint 18.3(sdc*), NTFS-HDD(sda1)</li>
+<li>보통 ntfsfix로 해결 가능<ul>
+<li>ntfs HDD dev 파일이 /dev/sda1인 경우</li>
+</ul>
+</li>
+</ul>
+<pre><code class="bash">sudo ntfsfix /dev/sda1
+</code></pre>
+
+<ul>
+<li>output example</li>
+</ul>
+<pre><code class="bash">$ sudo ntfsfix /dev/sda1 
+Mounting volume... The disk contains an unclean file system (0, 0).
+Metadata kept in Windows cache, refused to mount.
+FAILED
+Attempting to correct errors... 
+Processing $MFT and $MFTMirr...
+Reading $MFT... OK
+Reading $MFTMirr... OK
+Comparing $MFTMirr to $MFT... OK
+Processing of $MFT and $MFTMirr completed successfully.
+Setting required flags on partition... OK
+Going to empty the journal ($LogFile)... OK
+Checking the alternate boot sector... OK
+NTFS volume version is 3.1.
+NTFS partition /dev/sda1 was processed successfully.
+
+</code></pre>
+
+<h1 id="ssh-connection-by-public-key-authentication">SSH connection by public key authentication</h1>
+<p>공개키를 이용한 로그인 </p>
+<ul>
+<li>ssh 서버 설정 확인</li>
+</ul>
+<pre><code class="sh"># '/etc/ssh/sshd_config' in default on ubuntu 16.04 LTS
+cat /etc/ssh/sshd_config | grep -E 'PubkeyAuthentication`|RSAAuthentication'
+# check PubkeyAuthentication yes
+# check RSAAuthentication yes  # for RSA public key
+
+cat /etc/ssh/sshd_config | grep -E 'AuthorizedKeysFile'
+# check 'AuthorizedKeysFile %h/.ssh/authorized_keys' or '#AuthorizedKeysFile    %h/.ssh/authorized_keys'
+# default authorizedKyesFile path is '%h/.ssh/authorized_keys'
+# %h is user's home directory
+
+# Restart ssh daemons
+sudo systemctl restart sshd
+</code></pre>
+
+<ul>
+<li>SSH 키쌍 생성</li>
+</ul>
+<pre><code class="sh">ssh-keygen -c ed25519 -N '' -C '' -f ~/.ssh/id_ed25519 
+
+# -N : New passphrase, no encryption if empty.
+# -C : Comment, in public key file(.pub)
+# -f : specify a file(output)
+# -c : cipher type, ' rsa | dsa | ecdsa | ed25519 '
+</code></pre>
+
+<ul>
+<li>SSH 공개 키 복사</li>
+</ul>
+<pre><code>SSH_USER=jgseong
+SSH_REMOTE=192.168.0.2
+cat ~/.ssh/id_ed25519.pub | ssh -t ${SSH_USER}@${SSH_REMOTE} 'tee -a ~/.ssh/authorized_keys'
+</code></pre>
+
+<ul>
+<li>SSH 접속 with <code>-i</code> option</li>
+</ul>
+<pre><code># use with -i option to specify key file.
+SSH_USER=jgseong
+SSH_REMOTE=192.168.0.2
+ssh -i ~/.ssh/id_ed25519 ${SSH_USER}@${SSH_REMOTE}
+</code></pre>
+
+<ul>
+<li>SSH 접속 with <code>~/.ssh/config</code></li>
+</ul>
+<pre><code># use without -i option to specify key file.
+# edit ~/.ssh/config
+
+Host 192.168.0.2
+# two options to ignore host key check
+#    UserKnownHostsFile /dev/null
+#    StrictHostKeyChecking no
+   SendEnv LANG LC_*
+   HashKnownHosts yes
+   GSSAPIAuthentication yes
+   # Append to specify identity file
+   IdentityFile ~/.ssh/id_ed25519
+</code></pre>
+
+<pre><code class="sh">SSH_USER=jgseong
+SSH_REMOTE=192.168.0.2
+ssh ${SSH_USER}@${SSH_REMOTE}
+</code></pre>
+
+<h1 id="wireshark">사용자 계정으로 wireshark 실행</h1>
+<ol>
+<li><code>dumpcap</code> 파일의 소유 그룹과 그룹 실행 권한 확인</li>
+<li><code>which dumpcap</code>으로 경로 확인 가능</li>
+<li>'wireshark' 그룹에 현재 사용자 추가</li>
+</ol>
+<pre><code class="bash">sudo usermod -a -G wireshark $USER
+</code></pre>
+
+<ul>
+<li>output example</li>
+</ul>
+<pre><code class="bash"># dumpcap 파일의 소유 그룹과 그룹 실행 권한 확인
+ls /usr/bin/dumpcap  -l   # or 'ls -l $(which dumpcap)'
+-rwxr-xr-- 1 root wireshark 96464 Jun  1  2017 /usr/bin/dumpcap* 
+sudo usermod -a -G wireshark $USER 
+reboot # or logout/re-login
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../desktop/" class="btn btn-neutral float-right" title="Desktop">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../../openssl/api/evp-sym-cipher/" class="btn btn-neutral" title="EVP/Sym-Cipher"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../../openssl/api/evp-sym-cipher/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../desktop/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+
+</body>
+</html>

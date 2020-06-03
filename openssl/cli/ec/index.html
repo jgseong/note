@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>Keygen - Jgseong's Note</title>
+  <title>CLI/ec - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Keygen";
-    var mkdocs_page_input_path = "openssl/cli/keygen.md";
+    var mkdocs_page_name = "CLI/ec";
+    var mkdocs_page_input_path = "openssl/cli/ec.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -59,7 +59,11 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../api/c/">C</a>
+    <a class="" href="../../../api/theory/">Theory</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../api/getopt/">getopt</a>
                 </li>
     </ul>
 	    </li>
@@ -81,37 +85,90 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../virtualization/docker/">Docker</a>
+    <a class="" href="../../../virt/docker/">Docker</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../virtualization/qemu/">Qemu</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Libs</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../">Openssl-cli</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../api/">Openssl-api</a>
+    <a class="" href="../../../virt/qemu/">Qemu</a>
                 </li>
     </ul>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <span class="caption-text">Tips</span>
+    <span class="caption-text">OpenSSL</span>
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../tips/linux/">Linux</a>
+    <a class="" href="../digest/">CLI/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../enc/">CLI/enc</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">CLI/ec</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#generation-of-ec-key-pair">Generation of EC key pair</a></li>
+    
+
+    <li class="toctree-l3"><a href="#genrate-private-key">Genrate Private key</a></li>
+    
+
+    <li class="toctree-l3"><a href="#genrate-public-key">Genrate Public key</a></li>
+    
+
+    <li class="toctree-l3"><a href="#ecparam">ecparam 옵션</a></li>
+    
+
+    <li class="toctree-l3"><a href="#ec">ec 옵션</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../pki/">CLI/PKI</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/evp-digest/">EVP/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/evp-sym-cipher/">EVP/Sym-Cipher</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Linux</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/common/">Common</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/desktop/">Desktop</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/vim/">Vim</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Windows</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tips/windows/common/">Common</a>
                 </li>
     </ul>
 	    </li>
@@ -137,8 +194,12 @@
     <li><a href="../../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>OpenSSL &raquo;</li>
+        
+      
     
-    <li>Keygen</li>
+    <li>CLI/ec</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -148,47 +209,44 @@
           <div role="main">
             <div class="section">
               
-                <!-- TITLE: Generate Key Pair -->
-
-<!-- SUBTITLE: How to generate the key pair by using OpenSSL -->
-
-<h1 id="ec-key-pair">EC key pair</h1>
+                <h1 id="generation-of-ec-key-pair">Generation of EC key pair</h1>
 <ul>
 <li>EC(Elliptic Curve) 알고리즘을 사용한 키 생성</li>
 <li>Asymmetric key 알고리즘은 private key를 생성한 후, private key에 대응하는 public key를 생성</li>
 </ul>
-<h2 id="private-key">Private key 생성</h2>
+<h1 id="genrate-private-key">Genrate Private key</h1>
 <ul>
-<li>default로 PEM(Privacy-Enhanced Mail) 포맷으로 생성<blockquote>
-<p>openssl ecparam -genkey -name 'curve name' -out 'outfile'</p>
-</blockquote>
-</li>
-<li>Example</li>
+<li>default로 PEM(Privacy-Enhanced Mail) 포맷으로 생성</li>
 </ul>
+<pre><code>openssl ecparam -genkey -name 'curve name' -out 'outfile'
+</code></pre>
+
+<p><strong>Example</strong></p>
 <pre><code class="bash">openssl ecparam -genkey -name prime256v1 -out ecprivkey.pem
 </code></pre>
 
-<ul>
-<li>Example - Encrypt private key </li>
-</ul>
+<p><strong>Example - Encrypt private key</strong></p>
 <pre><code class="bash">openssl ec -aes-128-cbc -in ecprivkey.pem -out new_ecprivkey.pem
 # man enc 참고
 </code></pre>
 
-<h2 id="public-key">Public key 생성</h2>
-<blockquote>
-<p>openssl ec -in 'infile' -pubout -out 'outfile'
-* <code>'infile'</code> : private key 파일
-* <code>-pubout</code> : <code>'infile'</code>에 대응하는 공개 키 출력
-* Example</p>
-</blockquote>
+<h1 id="genrate-public-key">Genrate Public key</h1>
+<ul>
+<li>Required private key.</li>
+</ul>
+<pre><code>openssl ec -in 'infile' -pubout -out 'outfile'
+</code></pre>
+
+<ul>
+<li><code>'infile'</code> : private key 파일</li>
+<li><code>-pubout</code> : <code>'infile'</code>에 대응하는 공개 키 출력
+<strong>Example</strong></li>
+</ul>
 <pre><code class="bash">openssl ec -in ecprivkey.pem -pubout -out ecpubkey.pem
 </code></pre>
 
-<h2 id="ecparam">ecparam 옵션</h2>
-<ul>
-<li><code>man ecparam</code> 참고</li>
-</ul>
+<h1 id="ecparam">ecparam 옵션</h1>
+<p><code>man ecparam</code> 참고</p>
 <pre><code class="bash">ecparam [options] &lt;infile&gt; outfile
 where options are
  -inform arg       input format - default PEM (DER or PEM)
@@ -215,10 +273,8 @@ where options are
  -engine e         use engine e, possibly a hardware device
 </code></pre>
 
-<h2 id="ec">ec 옵션</h2>
-<ul>
-<li><code>man ec</code> 참고</li>
-</ul>
+<h1 id="ec">ec 옵션</h1>
+<p><code>man ec</code> 참고</p>
 <pre><code class="bash">ec [options] &lt;infile&gt; outfile
 where options are
  -inform arg     input format - DER or PEM
@@ -247,6 +303,15 @@ where options are
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../pki/" class="btn btn-neutral float-right" title="CLI/PKI">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../enc/" class="btn btn-neutral" title="CLI/enc"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
@@ -269,6 +334,10 @@ where options are
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../enc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../pki/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

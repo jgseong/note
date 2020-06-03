@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>Evp sym cipher - Jgseong's Note</title>
+  <title>EVP/Sym-Cipher - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
@@ -17,7 +17,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Evp sym cipher";
+    var mkdocs_page_name = "EVP/Sym-Cipher";
     var mkdocs_page_input_path = "openssl/api/evp-sym-cipher.md";
     var mkdocs_page_url = null;
   </script>
@@ -59,7 +59,11 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../api/c/">C</a>
+    <a class="" href="../../../api/theory/">Theory</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../api/getopt/">getopt</a>
                 </li>
     </ul>
 	    </li>
@@ -81,37 +85,99 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../virtualization/docker/">Docker</a>
+    <a class="" href="../../../virt/docker/">Docker</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../virtualization/qemu/">Qemu</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Libs</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../../cli/">Openssl-cli</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../">Openssl-api</a>
+    <a class="" href="../../../virt/qemu/">Qemu</a>
                 </li>
     </ul>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <span class="caption-text">Tips</span>
+    <span class="caption-text">OpenSSL</span>
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../tips/linux/">Linux</a>
+    <a class="" href="../../cli/digest/">CLI/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cli/enc/">CLI/enc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cli/ec/">CLI/ec</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cli/pki/">CLI/PKI</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../evp-digest/">EVP/Digest</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">EVP/Sym-Cipher</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#about-evp">About EVP</a></li>
+    
+
+    <li class="toctree-l3"><a href="#about-ctxcontext">About CTX(Context)</a></li>
+    
+
+    <li class="toctree-l3"><a href="#evp-cipher-apis">EVP Cipher APIs</a></li>
+    
+
+    <li class="toctree-l3"><a href="#evp_cipher_ctx">EVP_CIPHER_CTX 구조체</a></li>
+    
+
+    <li class="toctree-l3"><a href="#evp_cipher_ctx-functions">EVP_CIPHER_CTX functions</a></li>
+    
+
+    <li class="toctree-l3"><a href="#useful-apis">Useful APIs</a></li>
+    
+
+    <li class="toctree-l3"><a href="#evp-macros-and-others">EVP macros and others.</a></li>
+    
+
+    <li class="toctree-l3"><a href="#evp">EVP 암호/복호화 과정</a></li>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Linux</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/common/">Common</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/desktop/">Desktop</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/vim/">Vim</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Windows</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tips/windows/common/">Common</a>
                 </li>
     </ul>
 	    </li>
@@ -137,8 +203,12 @@
     <li><a href="../../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>OpenSSL &raquo;</li>
+        
+      
     
-    <li>Evp sym cipher</li>
+    <li>EVP/Sym-Cipher</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -148,11 +218,7 @@
           <div role="main">
             <div class="section">
               
-                <!-- TITLE: Symmetric Key Cipher with EVP -->
-
-<!-- SUBTITLE: A quick summary of API to use symmetric key cipher with EVP -->
-
-<h1 id="about-evp">About EVP</h1>
+                <h1 id="about-evp">About EVP</h1>
 <ul>
 <li>Perhaps, EVP stands for Envelope.</li>
 <li>High-level Cryptographic Functions.</li>
@@ -179,7 +245,7 @@
 <li>헤더(header) 파일</li>
 <li><code>#include &lt;openssl/evp.h&gt;</code></li>
 </ul>
-<h2 id="evp_cipher_ctx">EVP_CIPHER_CTX 구조체</h2>
+<h1 id="evp_cipher_ctx">EVP_CIPHER_CTX 구조체</h1>
 <pre><code class="c">struct evp_cipher_ctx_st{
   const EVP_CIPHER *cipher; 
   ENGINE *engine;           /* functional reference if 'cipher' is ENGINE-provided */
@@ -198,8 +264,8 @@
 } /* EVP_CIPHER_CTX */ ;
 </code></pre>
 
-<h2 id="ctx">CTX 초기화</h2>
-<h3 id="evp_cipher_ctx_init">EVP_CIPHER_CTX_init</h3>
+<h1 id="evp_cipher_ctx-functions">EVP_CIPHER_CTX functions</h1>
+<p><strong>EVP_CIPHER_CTX_init()</strong></p>
 <pre><code class="c">void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *ctx);
 </code></pre>
 
@@ -207,7 +273,7 @@
 <li>cipher context를 초기화.</li>
 <li><code>ctx</code> : cipher context의 주소.</li>
 </ul>
-<h2 id="evp-init">EVP 암호/복호화 초기 설정 - Init()</h2>
+<p><strong>EVP 암호/복호화 초기 설정 - Init()</strong></p>
 <pre><code class="c">int EVP_EncryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
 int EVP_DecryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
 int EVP_CipherInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv, int enc);
@@ -226,7 +292,7 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, ENGINE *impl,
 <li><code>iv</code> : binary iv 값, 암호 알고리즘에 따라 길이가 잘림, ECB mode에서는 <code>NULL</code>로 설정, 값이 있더라도 사용되지 않음.</li>
 <li><code>enc</code> : 암호/복호화 flag, <code>1</code>이면 <strong>암호화</strong>, <code>0</code>이면 <strong>복호화</strong>.</li>
 </ul>
-<h2 id="evp-update">EVP 암호/복호화 수행 - Update()</h2>
+<p><strong>EVP 암호/복호화 수행 - Update()</strong></p>
 <pre><code class="c">int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
 int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
 int EVP_CipherUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
@@ -243,7 +309,7 @@ int EVP_CipherUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigne
 <li><code>in</code> : 입력 데이터, 암호화시 평문, 복호화시 암호문.</li>
 <li><code>inl</code> : <code>in</code>의 길이</li>
 </ul>
-<h2 id="evp-final">EVP 암호/복호화 수행 - Final()</h2>
+<p><strong>EVP 암호/복호화 수행 - Final()</strong></p>
 <pre><code class="c">int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 int EVP_DecryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
@@ -262,7 +328,7 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 <li><code>outl</code> : <code>out</code>의 길이가 저장될 변수</li>
 </ul>
 <h1 id="useful-apis">Useful APIs</h1>
-<h2 id="evp_cipher_ctx_set_padding">EVP_CIPHER_CTX_set_padding</h2>
+<p><strong>EVP_CIPHER_CTX_set_padding()</strong></p>
 <pre><code class="c">int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int padding);
 </code></pre>
 
@@ -272,7 +338,7 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 <li><strong>ECB/CBC mode</strong>에서 사용.</li>
 <li><code>padding</code> : <code>1</code>이면 on, <code>0</code>이면 off.</li>
 </ul>
-<h2 id="evp_cipher_ctx_set_key_length">EVP_CIPHER_CTX_set_key_length</h2>
+<p><strong>EVP_CIPHER_CTX_set_key_length()</strong></p>
 <pre><code class="c">int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int keylen);
 </code></pre>
 
@@ -282,7 +348,7 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 <li>cipher에 따라 가변적인 key 길이 설정 가능.</li>
 <li><code>keylen</code> : 바이트 단위의 key 길이.</li>
 </ul>
-<h2 id="evp_cipher_ctx_ctrl">EVP_CIPHER_CTX_ctrl</h2>
+<p><strong>EVP_CIPHER_CTX_ctrl()</strong></p>
 <pre><code class="c">int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
 </code></pre>
 
@@ -294,14 +360,14 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 <li><code>arg</code> : 파라미터(정수형), <code>type</code>에 따라 용도가 달라짐.</li>
 <li><code>ptr</code> : 파라미터(정수형), 읽을/저장될 변수의 주소 등으로 사용 가능, type에 따라 용도가 달라짐.</li>
 </ul>
-<h2 id="evp_cipher_ctx_cleanup">EVP_CIPHER_CTX_cleanup</h2>
+<p><strong>EVP_CIPHER_CTX_cleanup()</strong></p>
 <pre><code class="c">int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *ctx);
 </code></pre>
 
 <ul>
 <li><code>ctx</code>의 내용을 삭제.</li>
 </ul>
-<h2 id="evp_get_cipherbyname">EVP_get_cipherbyname</h2>
+<p><strong>EVP_get_cipherbyname()</strong></p>
 <pre><code class="c">const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
 </code></pre>
 
@@ -312,17 +378,21 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
     e.g. <code>des-ecb</code>, <code>aes-128-ecb</code>, <code>aes-192-cbc</code>, <code>...</code>.</li>
 </ul>
 <h1 id="evp-macros-and-others">EVP macros and others.</h1>
-<h2 id="how-to-check-that-padding-is-disable">How to check that <code>padding</code> is disable</h2>
+<ul>
+<li>How to check that <code>padding</code> is disable</li>
+</ul>
 <pre><code class="c">int pad=(ctx-&gt;flags&amp;EVP_CIPH_NO_PADDING);
 </code></pre>
 
-<h2 id="evp_get_cipherbynidobj">EVP_get_cipherbynid/obj</h2>
+<p><strong>EVP_get_cipherbynid/obj</strong></p>
 <pre><code class="c">// a : integer
 #define EVP_get_cipherbynid(a) EVP_get_cipherbyname(OBJ_nid2sn(a))
 #define EVP_get_cipherbyobj(a) EVP_get_cipherbynid(OBJ_obj2nid(a))
 </code></pre>
 
-<h2 id="get-an-attributes-from-evp_cipher">Get an attributes from EVP_CIPHER</h2>
+<ul>
+<li>Get an attributes from EVP_CIPHER</li>
+</ul>
 <pre><code class="c">// e : const EVP_CIPHER*
 #define EVP_CIPHER_nid(e)              ((e)-&gt;nid)
 #define EVP_CIPHER_block_size(e)       ((e)-&gt;block_size)
@@ -333,7 +403,9 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 int EVP_CIPHER_type(const EVP_CIPHER *ctx);
 </code></pre>
 
-<h2 id="get-an-attributes-from-evp_cipher_ctx">Get an attributes from EVP_CIPHER_CTX</h2>
+<ul>
+<li>Get an attributes from EVP_CIPHER_CTX</li>
+</ul>
 <pre><code class="c">// e : EVP_CIPHER_CTX*
 #define EVP_CIPHER_CTX_cipher(e)       ((e)-&gt;cipher)  // get cipher object
 #define EVP_CIPHER_CTX_nid(e)          ((e)-&gt;cipher-&gt;nid)  // get cipher nid
@@ -347,13 +419,15 @@ int EVP_CIPHER_type(const EVP_CIPHER *ctx);
 #define EVP_CIPHER_CTX_mode(e)         ((e)-&gt;cipher-&gt;flags &amp; EVP_CIPH_MODE)  // get mode
 </code></pre>
 
-<h2 id="convert-for-asn1">Convert for ASN.1</h2>
+<ul>
+<li>Convert for ASN.1</li>
+</ul>
 <pre><code class="c">int EVP_CIPHER_param_to_asn1(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
 int EVP_CIPHER_asn1_to_param(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
 </code></pre>
 
 <h1 id="evp">EVP 암호/복호화 과정</h1>
-<h2 id="example-code-for-do_crypt">Example code for <code>do_crypt</code></h2>
+<p><strong>Example code for <code>do_crypt</code></strong></p>
 <pre><code class="c">do_crypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher,
         const unsigned char *key, const unsigned char *iv/*, int enc*/) // enc는 EVP_Cipher~()에서 사용
 {
@@ -392,7 +466,7 @@ int EVP_CIPHER_asn1_to_param(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
 }
 </code></pre>
 
-<h2 id="example-1-using-evp_encryptdecrypt">Example 1 - using EVP_Encrypt/Decrypt~()</h2>
+<p><strong>Example 1 - using EVP_Encrypt/Decrypt~()</strong></p>
 <pre><code class="c">/* enc.c */
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
@@ -543,7 +617,7 @@ int main(int argc, char **argv)
 }
 </code></pre>
 
-<h2 id="example-2-using-evp_cipher">Example 2 - using EVP_Cipher~()</h2>
+<p><strong>Example 2 - using EVP_Cipher~()</strong></p>
 <pre><code class="c">/* enc2.c */
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
@@ -655,7 +729,7 @@ int main(int argc, char **argv)
 }
 </code></pre>
 
-<h2 id="example">Example 결과</h2>
+<p><strong>Example 결과</strong></p>
 <pre><code class="bash">$ gcc enc.c -lcrypto
 $ cat -v data.txt
 OpenSSL EVP Symmetric Key Cipher APIs
@@ -676,7 +750,7 @@ OpenSSL EVP Symmetric Key Cipher APIs
 $
 </code></pre>
 
-<h1 id="reference">Reference</h1>
+<p><em>Reference</em></p>
 <ol>
 <li>OpenSSL을 이용한 보안 프로그래밍 / <a href="http://network.hanbat.ac.kr">네트워크연구실</a> </li>
 <li><a href="https://www.openssl.org">OpenSSL Official Site</a></li>
@@ -685,6 +759,15 @@ $
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../tips/linux/common/" class="btn btn-neutral float-right" title="Common">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../evp-digest/" class="btn btn-neutral" title="EVP/Digest"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -708,6 +791,10 @@ $
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../evp-digest/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../../tips/linux/common/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

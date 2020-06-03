@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>tmux - Jgseong's Note</title>
+  <title>Docker - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "tmux";
-    var mkdocs_page_input_path = "tools/tmux.md";
+    var mkdocs_page_name = "Docker";
+    var mkdocs_page_input_path = "virt/docker.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -72,36 +72,9 @@
 		
     <span class="caption-text">Tools</span>
     <ul class="subnav">
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">tmux</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#about-tmux">About tmux?</a></li>
-    
-
-    <li class="toctree-l3"><a href="#install-tmux-by-apt">Install tmux (by APT)</a></li>
-    
-
-    <li class="toctree-l3"><a href="#install-tmux-from-source">Install tmux (from source)</a></li>
-    
-
-    <li class="toctree-l3"><a href="#components">Components</a></li>
-    
-
-    <li class="toctree-l3"><a href="#commands-shortcuts">Commands Shortcuts</a></li>
-    
-
-    <li class="toctree-l3"><a href="#session">Session</a></li>
-    
-
-    <li class="toctree-l3"><a href="#window">Window</a></li>
-    
-
-    <li class="toctree-l3"><a href="#pane">Pane</a></li>
-    
-
-    </ul>
+    <a class="" href="../../tools/tmux/">tmux</a>
                 </li>
     </ul>
 	    </li>
@@ -110,13 +83,33 @@
 		
     <span class="caption-text">Virt.</span>
     <ul class="subnav">
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../../virt/docker/">Docker</a>
+    <a class="current" href="./">Docker</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#architecture">Architecture</a></li>
+    
+
+    <li class="toctree-l3"><a href="#install-refer-to-official-site">Install refer to official site</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#install-docker">Install docker</a></li>
+        
+            <li><a class="toctree-l4" href="#install-docker-compose">Install docker-compose</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#basic-commands">Basic Commands</a></li>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../virt/qemu/">Qemu</a>
+    <a class="" href="../qemu/">Qemu</a>
                 </li>
     </ul>
 	    </li>
@@ -204,11 +197,11 @@
     
       
         
-          <li>Tools &raquo;</li>
+          <li>Virt. &raquo;</li>
         
       
     
-    <li>tmux</li>
+    <li>Docker</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -218,156 +211,123 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="about-tmux">About tmux?</h1>
-<p>tmux(terminal multiplexer)는 많은 pseudoterminal을 window와 session 단위로 관리하는 도구
-하나의 tmux 서버가 세션을 관리하고, tmux 클라이언트는 tmux 서버와 소켓으로 통신하며
-그 세션의 pseudoterminal들을 사용자가 원하는 방식대로 보여준다고 한다. </p>
-<h1 id="install-tmux-by-apt">Install tmux (by APT)</h1>
-<pre><code class="sh">sudo add-apt-repository -y ppa:hnakamur/tmux 
-sudo apt update
-sudo apt install tmux
+                <h1 id="architecture">Architecture</h1>
+<p><img alt="Docker Architect" src="../images/docker-architect.png" title="Docker Architect" /></p>
+<h1 id="install-refer-to-official-site">Install refer to official site</h1>
+<ul>
+<li>Refer to <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Get Docker CE for Ubuntu</a></li>
+<li>To simply install by apt, refer to <a href="https://gist.github.com/jgseong/7516dcf03e47d94bfd7e043ba69de794">link</a>.</li>
+</ul>
+<h2 id="install-docker">Install docker</h2>
+<ul>
+<li>the way to install by script</li>
+</ul>
+<pre><code class="sh">curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# sudo groupadd docker   # if not be group
+sudo usermod -aG docker $USER
+
+# re-login $USER
+# logout
+
+# Test docker
+docker run hello-world
+
 </code></pre>
 
-<h1 id="install-tmux-from-source">Install tmux (from source)</h1>
-<pre><code class="sh">#!/bin/bash
-sudo apt update
-# install packages need to build
-sudo pat install -y git automake build-essential pkg-config libevent-dev libncurses5-dev
+<h2 id="install-docker-compose">Install docker-compose</h2>
+<ul>
+<li>Recommended after installed docker</li>
+<li>if host OS is alpinelinux, recommended to install by pip<blockquote>
+<p>For alpine, the following dependency packages are needed: py-pip, python-dev, libffi-dev, openssl-dev, gcc, libc-dev, and make.</p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="sh"># download docker-compose binary version 1.25.5
+# for specify version, use the shell variables.
+VER=1.25.5
+sudo curl -L &quot;https://github.com/docker/compose/releases/download/${VER}/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
 
-[ -d /tmp/tmux ] &amp;&amp; rm -rf /tmp/tmux
-git clone https://github.com/tmux/tmux.git /tmp/tmux 
+sudo chmod + /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-cd /tmp/tmux &amp;&amp; \
-git checkout master &amp;&amp; \
-./autogen.sh &amp;&amp; \
-./configure &amp;&amp; \ 
-make &amp;&amp; \
-sudo make install &amp;&amp; \
-cd - &amp;&amp; \
-rm -rf /tmp/tmux
+# test docker-compose
+docker-compose --version
 </code></pre>
 
-<h1 id="components">Components</h1>
+<h1 id="basic-commands">Basic Commands</h1>
 <ul>
-<li>session : tmux 실행단위, windows로 구성</li>
-<li>window : terminal 내 화면 단위(tab)</li>
-<li>pane : window 내 분할된 화면 단위</li>
-<li>status bar : 상태 bar</li>
+<li>show docker container</li>
 </ul>
-<h1 id="commands-shortcuts">Commands Shortcuts</h1>
-<pre><code class="bash">Ctrl+b, &lt;key&gt;   # ^b
+<pre><code class="sh"># show running docker containers
+docker ps 
 
-# Help
-Ctrl+b, ?       # ^b ?
-
-# Command mode
-Ctrl+b, :
-</code></pre>
-
-<h1 id="session">Session</h1>
-<ul>
-<li>New session</li>
-<li>`tmux new -s 'session name' in shell</li>
-<li>
-<p><code>^b n</code></p>
-</li>
-<li>
-<p>Edit session name</p>
-</li>
-<li>
-<p><code>^b $</code></p>
-</li>
-<li>
-<p>Detach session</p>
-</li>
-<li>
-<p><code>^b d</code> in tmux</p>
-</li>
-<li>
-<p>Attach session</p>
-</li>
-<li>
-<p><code>tmux attach -t 'session-number' # or 'session name'</code></p>
-</li>
-<li>
-<p>List sessions</p>
-</li>
-<li><code>tmux ls</code></li>
-</ul>
-<h1 id="window">Window</h1>
-<ul>
-<li>New window</li>
-<li>
-<p><code>^b c</code></p>
-</li>
-<li>
-<p>New Sesseion with window</p>
-</li>
-</ul>
-<pre><code>tmux new -s 'session name' -n 'window name'
+# show all docker containers
+docker ps -a
 </code></pre>
 
 <ul>
-<li>Edit Window name</li>
-<li>
-<p><code>^b ,</code></p>
-</li>
-<li>
-<p>Terminate Window</p>
-</li>
-<li><code>^b &amp;</code></li>
-<li>
-<p><code>^d</code> in pane</p>
-</li>
-<li>
-<p>Move to window space</p>
-</li>
-<li><code>^b &lt;number&gt;</code> </li>
-<li><code>^b n</code> : next window</li>
-<li><code>^b p</code> : previous window</li>
-<li><code>^b l</code> : last window</li>
-<li><code>^b w</code> : window selector</li>
-<li><code>^b f</code> : find by name </li>
+<li>show docker image</li>
 </ul>
-<h1 id="pane">Pane</h1>
+<pre><code class="sh">docker images
+</code></pre>
+
 <ul>
-<li>Divide pane</li>
-<li><code>^b %</code> : vertical</li>
-<li>
-<p><code>^b "</code> : horizontal</p>
-</li>
-<li>
-<p>Move to pane space</p>
-</li>
-<li>`^b q<number></li>
-<li><code>^b o</code> : 순서대로</li>
-<li>
-<p>`^b <arrow> : 방향키로 선택</p>
-</li>
-<li>
-<p>Delete pane</p>
-</li>
-<li><code>^b x</code></li>
-<li>
-<p><code>^d</code> in pane</p>
-</li>
-<li>
-<p>Adjust size fo pane</p>
-</li>
-<li><code>^b :</code> resize-pane</li>
-<li>
-<p><code>-[L|R|D|U] 'size'</code></p>
-</li>
-<li>
-<p>Modify Layout</p>
-</li>
-<li><code>^b &lt;space&gt;</code></li>
+<li>search image</li>
 </ul>
-<p><em>Reference</em></p>
-<ol>
-<li><a href="https://edykim.com/ko/post/tmux-introductory-series-summary/">tmux 입문자 시리즈 요약</a></li>
-<li><a href="https://dgkim5360.tistory.com/entry/the-first-steps-for-tmux-terminal-multiplexer">개발새발로그</a></li>
-</ol>
+<pre><code class="sh">docker search 'image name'
+</code></pre>
+
+<ul>
+<li>pull image</li>
+</ul>
+<pre><code class="sh">docker pull 'image name'
+</code></pre>
+
+<p>** examples</p>
+<pre><code class="sh">docker pull nginx
+docker pull jekyll/minimal
+</code></pre>
+
+<ul>
+<li>launch container</li>
+</ul>
+<pre><code class="sh">docker run [options] --name 'container name' 'image name'
+</code></pre>
+
+<p>** options</p>
+<pre><code class="bash">  -d : daemon mode
+    -p : port forwarding
+    --name : specify container name
+</code></pre>
+
+<p>** example</p>
+<pre><code class="sh">docker run -it --name minilinux apline
+docker run -d -p 8080:80 --name webserver nginx
+</code></pre>
+
+<ul>
+<li>control container</li>
+</ul>
+<pre><code class="sh">docker [start | restart | stop] webserver
+</code></pre>
+
+<ul>
+<li>delete container</li>
+</ul>
+<pre><code class="sh">docker rm [options] 'container name'
+</code></pre>
+
+<p>** options</p>
+<pre><code class="bash">  -f : force
+</code></pre>
+
+<ul>
+<li>delete image</li>
+</ul>
+<pre><code class="sh">docker rmi 'container name'
+</code></pre>
               
             </div>
           </div>
@@ -375,10 +335,10 @@ Ctrl+b, :
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../../virt/docker/" class="btn btn-neutral float-right" title="Docker">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../qemu/" class="btn btn-neutral float-right" title="Qemu">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../../api/getopt/" class="btn btn-neutral" title="getopt"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../tools/tmux/" class="btn btn-neutral" title="tmux"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -404,10 +364,10 @@ Ctrl+b, :
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../../api/getopt/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../../tools/tmux/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../../virt/docker/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../qemu/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

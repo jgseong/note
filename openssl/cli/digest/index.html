@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>Dgst - Jgseong's Note</title>
+  <title>CLI/Digest - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Dgst";
-    var mkdocs_page_input_path = "openssl/cli/dgst.md";
+    var mkdocs_page_name = "CLI/Digest";
+    var mkdocs_page_input_path = "openssl/cli/digest.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -59,7 +59,11 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../api/c/">C</a>
+    <a class="" href="../../../api/theory/">Theory</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../api/getopt/">getopt</a>
                 </li>
     </ul>
 	    </li>
@@ -81,37 +85,84 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../virtualization/docker/">Docker</a>
+    <a class="" href="../../../virt/docker/">Docker</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../virtualization/qemu/">Qemu</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Libs</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../">Openssl-cli</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../api/">Openssl-api</a>
+    <a class="" href="../../../virt/qemu/">Qemu</a>
                 </li>
     </ul>
 	    </li>
           
             <li class="toctree-l1">
 		
-    <span class="caption-text">Tips</span>
+    <span class="caption-text">OpenSSL</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">CLI/Digest</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#message-digest">Message Digest?</a></li>
+    
+
+    <li class="toctree-l3"><a href="#hash">Hash</a></li>
+    
+
+    <li class="toctree-l3"><a href="#hmac">HMAC</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../enc/">CLI/enc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ec/">CLI/ec</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../pki/">CLI/PKI</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/evp-digest/">EVP/Digest</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../api/evp-sym-cipher/">EVP/Sym-Cipher</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Linux</span>
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../tips/linux/">Linux</a>
+    <a class="" href="../../../tips/linux/common/">Common</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/desktop/">Desktop</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../../tips/linux/vim/">Vim</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Tip/Windows</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../../tips/windows/common/">Common</a>
                 </li>
     </ul>
 	    </li>
@@ -137,8 +188,12 @@
     <li><a href="../../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>OpenSSL &raquo;</li>
+        
+      
     
-    <li>Dgst</li>
+    <li>CLI/Digest</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -148,12 +203,7 @@
           <div role="main">
             <div class="section">
               
-                <!-- TITLE: Digest -->
-
-<!-- SUBTITLE: A quick summary of digest message by using openssl -->
-
-<h1 id="message-digest">Message Digest</h1>
-<h2 id="dgst">dgst 명령</h2>
+                <h1 id="message-digest">Message Digest?</h1>
 <ul>
 <li>해시(Hash), 메시지 다이제스트(Message Digest)</li>
 <li>HMAC(Hashed MAC)</li>
@@ -163,20 +213,15 @@
 <li>지원하는 알고리즘 목록은 <code>openssl list-message-digest-algorithms</code>로 확인 가능</li>
 <li>사용하는 <code>algorithm</code>은 <code>openssl dgst -help</code> (또는 <code>man</code> 참고)</li>
 <li>사용되는 입력 파일, '<code>infiles</code> ...'는 명령문 마지막에 위치해야 함</li>
-<li>
-<p><code>man dgst</code> 참고</p>
-<blockquote>
-<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
+<li><code>man dgst</code> 참고</li>
+</ul>
+<pre><code>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
 openssl dgst  'algorithm' [-hmac 'key']  [-out 'outfile']  ['infiles ...']
 openssl dgst  'algorithm' [-sign 'key file']  [-out 'outfile']  ['infiles ...']
 openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infiles ...']
-...</p>
-</blockquote>
-</li>
-<li>
-<p>Options are</p>
-</li>
-</ul>
+</code></pre>
+
+<p><strong>Options</strong></p>
 <pre><code class="bash">-c              to output the digest with separating colons
 -r              to output the digest in coreutils format
 -d              to output debug info
@@ -210,15 +255,16 @@ openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infile
 -whirlpool      to use the whirlpool message digest algorithm
 </code></pre>
 
-<h2 id="hash">해시(hash)</h2>
+<h1 id="hash">Hash</h1>
 <ul>
 <li>메시지 다이제스트</li>
 <li>각 파일에 대한 해시 값을 출력, 3개 파일이 입력이면 3개의 해시 값 출력</li>
-<li><code>-binary</code>와 <code>-hex</code>는 베타적으로 사용<blockquote>
-<p>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
-</blockquote>
-</li>
+<li><code>-binary</code>와 <code>-hex</code>는 베타적으로 사용</li>
 </ul>
+<pre><code>openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']
+</code></pre>
+
+<p><strong>examples</strong></p>
 <pre><code class="bash"># e.g.1
 openssl dgst -sha256 -out text.md text.txt
 
@@ -240,44 +286,42 @@ hexdump text.md
 0000020
 </code></pre>
 
-<h2 id="hmac">HMAC</h2>
+<h1 id="hmac">HMAC</h1>
 <ul>
-<li>키(key) 가 필요</li>
-<li>'key' 는 hex 값<blockquote>
-<p>openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']</p>
-</blockquote>
-</li>
+<li>Hash-based Mesasge Authentation Code</li>
+<li>키(key) 가 필요한 digest</li>
+<li>메시지를 인증하기 위한 코드</li>
+<li>'key' 는 hex 값</li>
 </ul>
+<pre><code>openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']
+</code></pre>
+
 <pre><code class="bash">openssl dgst -sha256 -hmac &quot;hmackey1234&quot; -out text.hmac text.txt
 </code></pre>
 
-<h2 id="_1">서명 및 검증</h2>
+<p><strong>서명 및 검증</strong></p>
 <ul>
 <li>키 파일(.pem, .key, ...)이 필요, 키 쌍 또는 개인 키</li>
 <li>Default key encoding is PEM </li>
 <li><a href="./openssl/cli/keygen#ec-key-pair">EC key pair 생성</a> 참고</li>
 <li>바이너리(binary) 로 출력, dafault</li>
 </ul>
-<h3 id="sign">서명(sign)</h3>
-<blockquote>
-<p>openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']</p>
-</blockquote>
-<h3 id="verify">검증(verify)</h3>
-<blockquote>
-<p>openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
-openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'</p>
-</blockquote>
-<ul>
-<li>Example output for signing message(or file)</li>
-</ul>
+<p><strong>서명(sign)</strong></p>
+<pre><code>openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']
+</code></pre>
+
+<p><strong>검증(verify)</strong></p>
+<pre><code>openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+</code></pre>
+
+<p><strong>Example output for signing message(or file)</strong></p>
 <pre><code class="bash"># 서명 예)
 openssl dgst -sha224 -binary -out text.md text.txt
 openssl dgst -sha224 -sign ecprivkey.pem -out text.sign text.md
 </code></pre>
 
-<ul>
-<li>Example output for verifying signature</li>
-</ul>
+<p><strong>Example output for verifying signature</strong></p>
 <pre><code class="bash"># 검증 예1) 공개 키로 검증
 $ openssl dgst -sha224 -verify ecpubkey.pem -signature text.sign text.md
 Verified OK
@@ -290,6 +334,15 @@ Verified OK
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../enc/" class="btn btn-neutral float-right" title="CLI/enc">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../../virt/qemu/" class="btn btn-neutral" title="Qemu"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -313,6 +366,10 @@ Verified OK
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../../../virt/qemu/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../enc/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
