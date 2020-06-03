@@ -1,16 +1,16 @@
+# About tmux?
+tmux(terminal multiplexer)는 많은 pseudoterminal을 window와 session 단위로 관리하는 도구
+하나의 tmux 서버가 세션을 관리하고, tmux 클라이언트는 tmux 서버와 소켓으로 통신하며
+그 세션의 pseudoterminal들을 사용자가 원하는 방식대로 보여준다고 한다. 
 
-<!-- TMUX Summary -->
-
-# Tmux
-
-## Install Tmux by APT
+# Install tmux (by APT)
 ```sh
 sudo add-apt-repository -y ppa:hnakamur/tmux 
 sudo apt update
 sudo apt install tmux
 ```
 
-## Install Tmux to compile
+# Install tmux (from source)
 ```sh
 #!/bin/bash
 sudo apt update
@@ -30,14 +30,14 @@ cd - && \
 rm -rf /tmp/tmux
 ```
 
-## Components
+# Components
 
 * session : tmux 실행단위, windows로 구성
 * window : terminal 내 화면 단위(tab)
 * pane : window 내 분할된 화면 단위
 * status bar : 상태 bar
 
-## Commands Shortcuts
+# Commands Shortcuts
 ```bash
 Ctrl+b, <key>   # ^b
 
@@ -48,7 +48,7 @@ Ctrl+b, ?       # ^b ?
 Ctrl+b, :
 ```
 
-## Session
+# Session
 
 * New session
   * `tmux new -s 'session name' in shell
@@ -66,7 +66,7 @@ Ctrl+b, :
 * List sessions
   * `tmux ls`
 
-## Window
+# Window
 
 * New window
   * `^b c`
@@ -91,7 +91,7 @@ tmux new -s 'session name' -n 'window name'
   * `^b w` : window selector
   * `^b f` : find by name 
 
-## Pane
+# Pane
 
 * Divide pane
   * `^b %` : vertical
@@ -114,5 +114,7 @@ tmux new -s 'session name' -n 'window name'
   * `^b <space>`
 
 
-## Link
+_Reference_
+
 1. [tmux 입문자 시리즈 요약](https://edykim.com/ko/post/tmux-introductory-series-summary/)
+2. [개발새발로그](https://dgkim5360.tistory.com/entry/the-first-steps-for-tmux-terminal-multiplexer)

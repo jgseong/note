@@ -1,9 +1,6 @@
-<!-- TITLE: Digest -->
-<!-- SUBTITLE: A quick summary of digest message by using openssl -->
+Message Digest?
+=====
 
-# Message Digest
-
-## dgst 명령
 * 해시(Hash), 메시지 다이제스트(Message Digest)
 * HMAC(Hashed MAC)
 * 서명(Sign) 및 검증(Verify)
@@ -13,13 +10,14 @@
 * 사용하는 `algorithm`은 `openssl dgst -help` (또는 `man` 참고)
 * 사용되는 입력 파일, '`infiles` ...'는 명령문 마지막에 위치해야 함
 * `man dgst` 참고
-> openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
-> openssl dgst  'algorithm' [-hmac 'key']  [-out 'outfile']  ['infiles ...']
-> openssl dgst  'algorithm' [-sign 'key file']  [-out 'outfile']  ['infiles ...']
-> openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infiles ...']
-> ...
+```
+openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...'] 
+openssl dgst  'algorithm' [-hmac 'key']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-sign 'key file']  [-out 'outfile']  ['infiles ...']
+openssl dgst  'algorithm' [-verify 'key file']  [-signature 'outfile']  ['infiles ...']
+```
 
-* Options are
+**Options**
 ```bash
 -c              to output the digest with separating colons
 -r              to output the digest in coreutils format
@@ -54,12 +52,14 @@
 -whirlpool      to use the whirlpool message digest algorithm
 ```
 
-## 해시(hash)
+# Hash
 * 메시지 다이제스트
 * 각 파일에 대한 해시 값을 출력, 3개 파일이 입력이면 3개의 해시 값 출력
 * `-binary`와 `-hex`는 베타적으로 사용
-> openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']
-
+```
+openssl dgst 'algorithm' [-hex|binary]  [-out 'outfile']  ['infiles ...']
+```
+**examples**
 ```bash
 # e.g.1
 openssl dgst -sha256 -out text.md text.txt
@@ -82,35 +82,46 @@ hexdump text.md
 0000020
 ```
 
-## HMAC
-* 키(key) 가 필요
+HMAC
+=====
+
+* Hash-based Mesasge Authentation Code
+* 키(key) 가 필요한 digest
+* 메시지를 인증하기 위한 코드
 * 'key' 는 hex 값
-> openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']
+```
+openssl dgst 'algorithm' -hmac 'key' [-hex|binary]  [-out 'outfile']  ['infiles ...']
+```
 ```bash
 openssl dgst -sha256 -hmac "hmackey1234" -out text.hmac text.txt
 ```
 
-## 서명 및 검증
+**서명 및 검증**
+
 * 키 파일(.pem, .key, ...)이 필요, 키 쌍 또는 개인 키
   * Default key encoding is PEM 
   * [EC key pair 생성](./openssl/cli/keygen#ec-key-pair) 참고
 * 바이너리(binary) 로 출력, dafault
 
-### 서명(sign)
-> openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']
+**서명(sign)**
+```
+openssl dgst 'algorithm' -sign 'privkey file' [-out 'outfile']  ['infiles ...']
+```
 
-### 검증(verify)
-> openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
-> openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+**검증(verify)**
+```
+openssl dgst 'algorithm' -verify 'pubkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+openssl dgst 'algorithm' -prverify 'privkey file' -signature 'signed file' [-out 'outfile'] 'infiles ...'
+```
 
-* Example output for signing message(or file)
+**Example output for signing message(or file)**
 ```bash
 # 서명 예)
 openssl dgst -sha224 -binary -out text.md text.txt
 openssl dgst -sha224 -sign ecprivkey.pem -out text.sign text.md
 ```
 
-* Example output for verifying signature
+**Example output for verifying signature**
 ```bash
 # 검증 예1) 공개 키로 검증
 $ openssl dgst -sha224 -verify ecpubkey.pem -signature text.sign text.md
@@ -120,4 +131,5 @@ Verified OK
 $ openssl dgst -sha224 -prverify ecprivkey.pem -signature text.sign text.md
 Verified OK
 ```
+
 

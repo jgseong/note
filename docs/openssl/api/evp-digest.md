@@ -1,6 +1,3 @@
-<!-- TITLE: Message Digest with EVP -->
-<!-- SUBTITLE: A quick summary of API to use message digest with EVP -->
-
 # Message Digest?
 * 임의의 길이를 가지는 메시지에 대응되는 일정한 길이의 코드.
 * 해시(hash), 메시지 다이제트(message digest)
@@ -36,20 +33,21 @@ struct env_md_ctx_st {
     int (*update) (EVP_MD_CTX *ctx, const void *data, size_t count);
 } /* EVP_MD_CTX */ ;
 ```
-## EVP_MD_CTX_init
+# Basic functions
+**EVP_MD_CTX_init()**
 ```c
 void EVP_MD_CTX_init(EVP_MD_CTX *ctx);
 ```
 * `ctx` : message digest context
 * `ctx`를 초기화
 
-## EVP_MD_CTX_create
+**EVP_MD_CTX_create()**
 ```c
 EVP_MD_CTX *EVP_MD_CTX_create(void);
 ```
 * `EVP_MD_CTX` 동적할당
 
-## EVP_DigestInit
+**EVP_DigestInit()**
 ```c
 int EVP_DigestInit(EVP_MD_CTX *ctx, const EVP_MD *type);
 int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, ENGINE *impl);
@@ -75,7 +73,7 @@ int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type, ENGINE *impl);
 * message digest context 설정, 해시하기 위한 초기설정.
 * 성공시 1, 실패시 0 리턴.
 
-## EVP_DigestUpdate
+**EVP_DigestUpdate()**
 ```c
 int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d, size_t cnt);
 ```
@@ -85,7 +83,7 @@ int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d, size_t cnt);
 * 메시지를 입력으로 해시 알고리즘을 수행한다.
 * 성공시 1, 실패시 0 리턴.
 
-## EVP_DigestFinal
+**EVP_DigestFinal()**
 ```c
 int EVP_DigestFinal(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *s);
 int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *s);
@@ -97,20 +95,21 @@ int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md, unsigned int *s);
 * `EVP_DigestFinal_ex()`는 자동으로 ctx를 clean up.
 * 성공시 1, 실패시 0 리턴.
 
-## EVP_MD_CTX_cleanup
+**EVP_MD_CTX_cleanup()**
 ```c
 int EVP_MD_CTX_cleanup(EVP_MD_CTX *ctx);
 ```
 * `ctx`를 clean up.
 
-## EVP_MD_CTX_destroy
+**EVP_MD_CTX_destroy()**
 ```c
 void EVP_MD_CTX_destroy(EVP_MD_CTX *ctx);
 ```
 * `ctx`를 clean up.
 * `EVP_MD_CTX_create()`로 할당된 `ctx`를 해재.
 
-## EVP_MD_CTX_copy
+# Useful functions & contants
+**EVP_MD_CTX_copy()**
 ```c
 int EVP_MD_CTX_copy(EVP_MD_CTX *out,EVP_MD_CTX *in);
 int EVP_MD_CTX_copy_ex(EVP_MD_CTX *out,const EVP_MD_CTX *in);
@@ -122,13 +121,13 @@ int EVP_MD_CTX_copy_ex(EVP_MD_CTX *out,const EVP_MD_CTX *in);
 * `EVP_MD_CTX_copy_ex()`는 자동으로 `out`을 초기화.
 * 성공시 1, 실패시 0 리턴.
 
-## EXP_MAX_MD_SIZE
+**EXP_MAX_MD_SIZE**
 ```c
 #define EVP_MAX_MD_SIZE 64     /* SHA512 */
 ```
 * OpenSSL에서 정의한 message digest의 최대 크기(in bytes)
 
-## EVP_MD_type
+**EVP_MD_type**
 * EVP_MD에 해당하는 알고리즘의 정보를 리턴하는 함수
 ```c
 int EVP_MD_type(const EVP_MD *md);
@@ -137,7 +136,7 @@ int EVP_MD_type(const EVP_MD *md);
 * 실패시 `NID_undef` 리턴.
   e.g. `EVP_MD_type(EVP_sha1());` 는 `NID_sha1`를 리턴.
 
-## EVP_MD_pkey_type
+**EVP_MD_pkey_type()**
 ```c
 int EVP_MD_pkey_type(const EVP_MD *md);
 ```
@@ -145,20 +144,20 @@ int EVP_MD_pkey_type(const EVP_MD *md);
 * 실패시 `NID_undef` 리턴.
   e.g. RSA방식의 키를 사용한 경우, `NID_sha1WithRSAEncrption`을 리턴.
 
-## EVP_MD_size
+**EVP_MD_size**
 ```c
 int EVP_MD_size(const EVP_MD *md);
 ```
 * `EVP_MD`에 해당하는 알고리즘이 출력하는 해시의 길이를 리턴.(바이트)
 
-## EVP_MD_block_size
+**EVP_MD_block_size**
 ```c
 int EVP_MD_block_size(const EVP_MD *md);
 ```
 * `EVP_MD`에 해당하는 알고리즘이 사용하는 메시지 블럭 길이를 리턴.
 
-## Useful macro of EVP_MD_CTX
-### `ctx`에 설정된 정보를 리턴하는 함수 및 매크로
+# Useful macro
+* `ctx`에 설정된 정보를 리턴하는 함수 및 매크로
  ```c
 const EVP_MD *EVP_MD_CTX_md(const EVP_MD_CTX *ctx);
 #define EVP_MD_CTX_size(e)             EVP_MD_size(EVP_MD_CTX_md(e))
@@ -166,7 +165,7 @@ const EVP_MD *EVP_MD_CTX_md(const EVP_MD_CTX *ctx);
 #define EVP_MD_CTX_type(e)             EVP_MD_type((e)->digest)
 ```
 
-### EVP_get_digestbyname
+**EVP_get_digestbyname()**
 ```c
 const EVP_MD *EVP_get_digestbyname(const char *name);
 ```
@@ -174,22 +173,22 @@ const EVP_MD *EVP_get_digestbyname(const char *name);
 * `name`에 해당하는 `EVP_MD` 구조체 포인터를 리턴, 실패시 `NULL` 리턴.
 * 함수 수행 전에 `OpenSSL_add_all_digests()`이 호출되어야 함.
 
-### EVP_get_digestbynid
+**EVP_get_digestbynid()**
 ```c
 #define EVP_get_digestbynid(a) EVP_get_digestbyname(OBJ_nid2sn(a))
 ```
 * digest NID에 해당하는 `EVP_MD*` 리턴
 
-### EVP_get_digestbyobj
+**EVP_get_digestbyobj()**
 ```c
 #define EVP_get_digestbyobj(a) EVP_get_digestbynid(OBJ_obj2nid(a))
 ```
 * `ASN1_OBJECT` 구조체에 해당하는 `EVP_MD*` 리턴
 
-# Examples
+**Examples**
 ## `md.c`
 ```c
-Example - Message digest for file
+// Example - Message digest for file
 /* md.c */
 #include <stdio.h>
 #include <stdlib.h>
@@ -252,7 +251,7 @@ void main(int argc, char **argv)
 }
 ```
 
-## 실행 결과
+**실행 결과**
 ```bash
 $ gcc md.c -lcrypto
 $ ./a.out sha1 md.c 
@@ -265,7 +264,7 @@ $
 * Init 과정에서 키 값을 설정하는 것만 EVP_MD와 다름.
 * `man hmac`
 
-## HMAC()
+# HMAC()
 ```c
 #include <openssl/hmac.h>
 
@@ -282,14 +281,14 @@ unsigned char *HMAC(const EVP_MD *evp_md, const void *key,
 * `md` : HMAC을 저장.
 * `md_len` : 출력된 `md`의 길이를 저장.
 
-## Initialize
-### HMAC_CTX_init()
+# Basic functions
+**HMAC_CTX_init()**
 ```c
 void HMAC_CTX_init(HMAC_CTX *ctx);
 ```
 * hmac context를 초기화.
 
-### HMAC_Init()
+**HMAC_Init()**
 ```c
 int HMAC_Init(HMAC_CTX *ctx, const void *key, int key_len, const EVP_MD *md);
 int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int key_len, const EVP_MD *md, ENGINE *impl);
@@ -300,7 +299,7 @@ int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int key_len, const EVP_MD *md, 
 * `md` : 해시 알고리즘.
 * `HMAC_Init_ex()`은 해시 알고리즘에 따라 **ENGINE**을 추가 구성 가능.
 
-### HMAC_Update()
+**HMAC_Update()**
 ```c
 int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, int len);
 ```
@@ -309,7 +308,7 @@ int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, int len);
 * `len` : `data`의 길이.
 * 설정된 키와 해시 알고리즘으로 HMAC을 계산.
 
-### HMAC_Final()
+**HMAC_Final()**
 ```c
 int HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
 ```
@@ -319,7 +318,7 @@ int HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
 * 출력된 HMAC을 `md`에 저장.
 * `md_len`은 `NULL`이면 안됨.
 
-### Cleanup
+**Cleanup funcions**
 ```c
 void HMAC_CTX_cleanup(HMAC_CTX *ctx);
 void HMAC_cleanup(HMAC_CTX *ctx);
@@ -327,10 +326,9 @@ void HMAC_cleanup(HMAC_CTX *ctx);
 * hmac context를 clean up. (HMAC을 생성하기 위해 할당되었던 자원을 해제, 키 값 제거 등 context의 내용을 삭제)
 * `HMAC_cleanup()`은 `HMAC_CTX_cleanup()`의 별칭, 0.9.6b와 하위 호환성(back compatibility)을 위해 사용, 사용되지 않음.
 
-## Example
-### hmac.c
+**Example - hmac.c**
 ```c
-Example - HMAC for a message.
+// Example - HMAC for a message.
 /* hmac.c */
 #include <stdio.h>
 #include <stdlib.h>
@@ -388,7 +386,7 @@ void main(int argc, char **argv)
 	printhex(md, mdLen);
 }
 ```
-### 실행 결과
+**실행 결과**
 ```bash
 $ gcc hmac.c -lcrypto
 $ ./a.out sha1 password1234 "Hello, openssl"
@@ -399,7 +397,7 @@ $
 ```
 
 
-Reference
-=====
+_Reference_
+
 [1] OpenSSL을 이용한 보안 프로그래밍 / 네트워크연구실(http://network.hanbat.ac.kr)
 [2] www.openssl.org

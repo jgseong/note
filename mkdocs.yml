@@ -3,17 +3,26 @@ site_name: Jgseong's Note
 nav:
   - Home: 'index.md'
   - 'APIs':
-    - 'C': 'api/c.md'
+    - 'Theory': 'api/theory.md'
+    - 'getopt': 'api/getopt.md'
   - 'Tools':
     - 'tmux': 'tools/tmux.md'
   - 'Virt.':
-    - 'Docker': 'virtualization/docker.md'
-    - 'Qemu': 'virtualization/qemu.md'
-  - 'Libs':
-    - 'Openssl-cli': 'openssl/cli.md'
-    - 'Openssl-api': 'openssl/api.md'
-  - 'Tips': 
-    - 'Linux': 'tips/linux.md'
+    - 'Docker': 'virt/docker.md'
+    - 'Qemu': 'virt/qemu.md'
+  - 'OpenSSL' : 
+    - 'CLI/Digest' : 'openssl/cli/digest.md'
+    - 'CLI/enc' : 'openssl/cli/enc.md'
+    - 'CLI/ec' : 'openssl/cli/ec.md'
+    - 'CLI/PKI' : 'openssl/cli/pki.md'
+    - 'EVP/Digest' : 'openssl/api/evp-digest.md'
+    - 'EVP/Sym-Cipher' : 'openssl/api/evp-sym-cipher.md'
+  - 'Tip/Linux' : 
+    - 'Common': 'tips/linux/common.md'
+    - 'Desktop': 'tips/linux/desktop.md'
+    - 'Vim': 'tips/linux/vim.md'
+  - 'Tip/Windows' : 
+    - 'Common': 'tips/windows/common.md'
 
 theme: readthedocs
 

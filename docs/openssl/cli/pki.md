@@ -1,10 +1,7 @@
-<!-- TITLE: PKI -->
-<!-- SUBTITLE: A quick summary of PKI by using openssl -->
-
-# Settings for **Root CA**
+# Settings for Root CA
 * openssl을 이용하여 인증서 발급을 위해 PKI 인프라 구성
 * root CA 에서 사용하는 기본 디렉터리 및 파일 준비.
-* Example
+**Example**
 ```bash
 sudo -s
 mkdir -p /opt/pki/root
@@ -16,7 +13,7 @@ cp /etc/pki/tls/openssl.cnf $ROOTCADIR/openssl.cnf
 export OPENSSL_CONF=$ROOTCADIR/openssl.cnf
 ```
 
-* Check root ca for files
+**Check root ca for files**
 ```bash
 $ ls /opt/pki/root
 drwx------. 2 root  4096 Sep 20 21:23 private
@@ -28,7 +25,7 @@ drwxr-xr-x. 2 root  4096 Sep 20 21:23 certs
 -rw-r--r--. 1 root 10923 Sep 20 21:24 openssl.cnf
 ```
 
-* `openssl.cnf` 내용
+**`openssl.cnf` 내용**
 ```
 ...
 ####################################################################
@@ -59,7 +56,8 @@ x509_extensions = usr_cert              # The extentions to add to the cert
 ...
 ```
 
-## root CA key 생성
+# Create the root CA
+1. root CA key 생성
 * 인증서 생성에 필요한 CA의 개인키 를 생성.
 * OpenSSL 의 "[EC key pair 생성](./openssl/cli/keygen#ec-key-pair)" 참고.
 * Example
@@ -69,8 +67,7 @@ openssl ecparam -genkey -name prime256v1 -out private/cakey.pem
 openssl ec -in private/cakey.pem -out private/cakey.pem -aes256
 chmod 400 private/cakey.pem
 ```
-
-## root CA 인증서 생성
+2. root CA 인증서 생성
 * 자가 서명(self-signed) 된 인증서를 생성.
 * x509 형식의 인증서로 생성.
 * PEM으로 출력(default)
@@ -92,19 +89,18 @@ Email Address []:rootca@example.com
 ```bash
 chmod 444 certs/ca.crt.pem
 ```
-
-# 사용자 인증서 생성
+3. 사용자 인증서 생성
 * CSR(Certificate Signing Request) 를 생성 후, root CA에게 인증서 발행을 요청.
 * PEM으로 출력(기본값)
-### 사용자 개인 키 생성 (at a host)
+**사용자 개인 키 생성 (at a host)**
 * 인증서를 생성하기 위해서는 개인 키를 생성 필요.
 ```bash
 cd opt/pki
 mkdir host1 && cd host1
 openssl genrsa -out host1.key.pem
 ```
-
-## CSR 생성 (at a host)
+# CSR 생성
+* Do at the client side.
 * 사용자의 개인 키로 CSR 파일 생성.
 * CSR 생성 시, Country, State, Locality, Organization 는 root CA의 인증서와 동일해야 함(기본값), openssl.cnf 에서 설정 가능.
 ```bash
@@ -126,7 +122,7 @@ A challenge password []:
 An optional company name []:
 ```
 
-## 인증서 발행 (at a root CA)
+# 인증서 발행 (at a root CA)
 * CA로부터 인증서 발행.
 * 발행 성공 시, serial 번호가 증가하며 index.txt에 추가.
   * serial, index.txt눈 임의로 수정하면 안됨.
@@ -143,10 +139,11 @@ openssl ca -in host1.csr.pem -out host1.crt.pem
 * 옵션으로 CA 키, CA 인증서, MD 알고리즘, 발행된 인증서의 위치와 이름을 지정 가능.
 * MD 알고리즘은 CA 인증서와 동일해야 발행 가능.
 * 인증서 발행 시 ca 명령
-> openssl ca  -in 'csr infile' [-config 'config file']  [-keyfile 'CA keyfile']  [-cert 'CA certificate file']  [-notext]  [-md 'md algorithm]  [-out 'cert outfile']
-> ...
+```
+openssl ca  -in 'csr infile' [-config 'config file']  [-keyfile 'CA keyfile']  [-cert 'CA certificate file']  [-notext]  [-md 'md algorithm]  [-out 'cert outfile'] ...
+```
 
-* `openssl.cnf` 내용
+**`openssl.cnf` 내용**
 ```
 dir             = /opt/pki/root         # root CA basedir.
 certs           = $dir/certs
@@ -156,14 +153,16 @@ private_key     = $dir/private/cakey.pem # use if no "-keyfile" option.
 default_days    = 365                    # use if no "-days" option.
 default_md      = sha256                 # use if no "-md" option.
 ```
-* Example
+**Example**
 ```bash
 openssl ca -keyfile $ROOTCADIR/private/cakey.pem -cert $ROOTCADIR/cacert.pem -notext -md -sha1 -in host1.csr.pem -out host1.crt.pem
 ```
 
-# X509 인증서 내용 출력
-> openssl x509 -in 'infile' -noout -text
-* Example
+**X509 인증서 내용 출력**
+```
+openssl x509 -in 'infile' -noout -text
+```
+**Example**
 ```bash
 openssl x509 -in host1.crt.pem -noout -text
 ```
@@ -178,8 +177,10 @@ V	170920145518Z		1000	unknown	/C=KR/ST=Daejeon/O=example/OU=host1/CN=host1.examp
 * 발행된 인증서는 CA 인증서로 검증(Verify)한다.
 * CA 인증서만 있으면 검증 가능
 * 인증서 검증
-> openssl verify -CAfile 'CA certificate file' 'target certificate file'
-* Example
+```
+openssl verify -CAfile 'CA certificate file' 'target certificate file'
+```
+**Example**
 ```bash
 openssl verify -CAfile $ROOTCADIR/cacert.pem host1.crt.pem
 ```

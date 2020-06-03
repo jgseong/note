@@ -15,11 +15,13 @@ if ! [ -f ./priv.key ]; then
 fi
 
 case "$1" in 
-  build|gh-deploy)
+  --help|serve|build|gh-deploy)
+    CLI=mkdocs
     ;;
   *)
-    echo "Not support command. Only 'build' or 'gh-deploy'"
-    exit 1
+    CLI=
+#    echo "Not support command. Only 'build' or 'gh-deploy'"
+#    exit 1
     ;;
 esac
 
@@ -32,5 +34,5 @@ if [ ${CNT} -eq 0 ]; then
   docker build --build-arg USER=${USER} -t ${IMG}:${TAG} .
 fi
 
-docker run --rm -it -u ${USER} -v ${PWD}:/home/${USER}/docs ${IMG}:${TAG} mkdocs "$1"
+docker run --rm -it -u ${USER} -v ${PWD}:/home/${USER}/docs ${IMG}:${TAG} ${CLI} "$@"
 

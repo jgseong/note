@@ -1,6 +1,3 @@
-<!-- TITLE: Symmetric Key Cipher with EVP -->
-<!-- SUBTITLE: A quick summary of API to use symmetric key cipher with EVP -->
-
 # About EVP
 * Perhaps, EVP stands for Envelope.
 * High-level Cryptographic Functions.
@@ -23,7 +20,7 @@
 * 헤더(header) 파일
   * `#include <openssl/evp.h>`
 
-## EVP_CIPHER_CTX 구조체
+# EVP_CIPHER_CTX 구조체
 ```c
 struct evp_cipher_ctx_st{
   const EVP_CIPHER *cipher; 
@@ -43,15 +40,15 @@ struct evp_cipher_ctx_st{
 } /* EVP_CIPHER_CTX */ ;
 ```
 
-## CTX 초기화
-### EVP_CIPHER_CTX_init
+# EVP_CIPHER_CTX functions
+**EVP_CIPHER_CTX_init()**
 ```c
 void EVP_CIPHER_CTX_init(EVP_CIPHER_CTX *ctx);
 ```
   * cipher context를 초기화.
   * `ctx` : cipher context의 주소.
 
-## EVP 암호/복호화 초기 설정 - Init()
+**EVP 암호/복호화 초기 설정 - Init()**
 ```c
 int EVP_EncryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
 int EVP_DecryptInit(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, unsigned char *key, unsigned char *iv);
@@ -69,7 +66,7 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *type, ENGINE *impl,
   * `iv` : binary iv 값, 암호 알고리즘에 따라 길이가 잘림, ECB mode에서는 `NULL`로 설정, 값이 있더라도 사용되지 않음.
   * `enc` : 암호/복호화 flag, `1`이면 **암호화**, `0`이면 **복호화**.
 
-## EVP 암호/복호화 수행 - Update()
+**EVP 암호/복호화 수행 - Update()**
 ```c
 int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
 int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl);
@@ -85,7 +82,7 @@ int EVP_CipherUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigne
   * `in` : 입력 데이터, 암호화시 평문, 복호화시 암호문.
   * `inl` : `in`의 길이
 
-## EVP 암호/복호화 수행 - Final()
+**EVP 암호/복호화 수행 - Final()**
 ```c
 int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
 int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
@@ -103,7 +100,7 @@ int EVP_CipherFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl);
   * `outl` : `out`의 길이가 저장될 변수
   
 # Useful APIs
-## EVP_CIPHER_CTX_set_padding
+**EVP_CIPHER_CTX_set_padding()**
 ```c
 int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int padding);
 ```
@@ -112,7 +109,7 @@ int EVP_CIPHER_CTX_set_padding(EVP_CIPHER_CTX *ctx, int padding);
   * **ECB/CBC mode**에서 사용.
   * `padding` : `1`이면 on, `0`이면 off.
 
-## EVP_CIPHER_CTX_set_key_length
+**EVP_CIPHER_CTX_set_key_length()**
 ```c
 int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int keylen);
 ```
@@ -121,7 +118,7 @@ int EVP_CIPHER_CTX_set_key_length(EVP_CIPHER_CTX *ctx, int keylen);
   * cipher에 따라 가변적인 key 길이 설정 가능.
   * `keylen` : 바이트 단위의 key 길이.
 
-## EVP_CIPHER_CTX_ctrl
+**EVP_CIPHER_CTX_ctrl()**
 ```c
 int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
 ```
@@ -132,13 +129,13 @@ int EVP_CIPHER_CTX_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg, void *ptr);
   * `arg` : 파라미터(정수형), `type`에 따라 용도가 달라짐.
   * `ptr` : 파라미터(정수형), 읽을/저장될 변수의 주소 등으로 사용 가능, type에 따라 용도가 달라짐.
 
-## EVP_CIPHER_CTX_cleanup
+**EVP_CIPHER_CTX_cleanup()**
 ```c
 int EVP_CIPHER_CTX_cleanup(EVP_CIPHER_CTX *ctx);
 ```
   * `ctx`의 내용을 삭제.
 
-## EVP_get_cipherbyname
+**EVP_get_cipherbyname()**
 ```c
 const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
 ```
@@ -148,19 +145,19 @@ const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
     e.g. `des-ecb`, `aes-128-ecb`, `aes-192-cbc`, `...`.
 
 # EVP macros and others.
-## How to check that `padding` is disable
+* How to check that `padding` is disable
 ```c
 int pad=(ctx->flags&EVP_CIPH_NO_PADDING);
 ```
 
-## EVP_get_cipherbynid/obj
+**EVP_get_cipherbynid/obj**
 ```c
 // a : integer
 #define EVP_get_cipherbynid(a) EVP_get_cipherbyname(OBJ_nid2sn(a))
 #define EVP_get_cipherbyobj(a) EVP_get_cipherbynid(OBJ_obj2nid(a))
 ```
 
-## Get an attributes from EVP_CIPHER
+* Get an attributes from EVP_CIPHER
 ```c
 // e : const EVP_CIPHER*
 #define EVP_CIPHER_nid(e)              ((e)->nid)
@@ -172,7 +169,7 @@ int pad=(ctx->flags&EVP_CIPH_NO_PADDING);
 int EVP_CIPHER_type(const EVP_CIPHER *ctx);
 ```
 
-## Get an attributes from EVP_CIPHER_CTX
+* Get an attributes from EVP_CIPHER_CTX
 ```c
 // e : EVP_CIPHER_CTX*
 #define EVP_CIPHER_CTX_cipher(e)       ((e)->cipher)  // get cipher object
@@ -187,14 +184,14 @@ int EVP_CIPHER_type(const EVP_CIPHER *ctx);
 #define EVP_CIPHER_CTX_mode(e)         ((e)->cipher->flags & EVP_CIPH_MODE)  // get mode
 ```
 
-## Convert for ASN.1
+* Convert for ASN.1
 ```c
 int EVP_CIPHER_param_to_asn1(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
 int EVP_CIPHER_asn1_to_param(EVP_CIPHER_CTX *c, ASN1_TYPE *type);
 ```
 
 # EVP 암호/복호화 과정
-## Example code for `do_crypt`
+**Example code for `do_crypt`**
 ```c
 do_crypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher,
         const unsigned char *key, const unsigned char *iv/*, int enc*/) // enc는 EVP_Cipher~()에서 사용
@@ -234,7 +231,7 @@ do_crypt(FILE *inFp, FILE *outFp, const EVP_CIPHER *cipher,
 }
 ```
 
-## Example 1 - using EVP_Encrypt/Decrypt~()
+**Example 1 - using EVP_Encrypt/Decrypt~()**
 ```c
 /* enc.c */
 #include <stdio.h>
@@ -386,7 +383,7 @@ int main(int argc, char **argv)
 }
 ```
 
-## Example 2 - using EVP_Cipher~()
+**Example 2 - using EVP_Cipher~()**
 ```c
 /* enc2.c */
 #include <stdio.h>
@@ -499,7 +496,7 @@ int main(int argc, char **argv)
 }
 ```
 
-## Example 결과
+**Example 결과**
 ```bash
 $ gcc enc.c -lcrypto
 $ cat -v data.txt
@@ -521,7 +518,7 @@ OpenSSL EVP Symmetric Key Cipher APIs
 $
 ```
 
-Reference
-=====
+_Reference_
+
 1. OpenSSL을 이용한 보안 프로그래밍 / [네트워크연구실](http://network.hanbat.ac.kr) 
 2. [OpenSSL Official Site](https://www.openssl.org)

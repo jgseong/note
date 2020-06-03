@@ -1,34 +1,36 @@
-<!-- TITLE: Generate Key Pair -->
-<!-- SUBTITLE: How to generate the key pair by using OpenSSL -->
-
-# EC key pair
+# Generation of EC key pair
 * EC(Elliptic Curve) 알고리즘을 사용한 키 생성
 * Asymmetric key 알고리즘은 private key를 생성한 후, private key에 대응하는 public key를 생성
 
-## Private key 생성
+# Genrate Private key
 * default로 PEM(Privacy-Enhanced Mail) 포맷으로 생성
-> openssl ecparam -genkey -name 'curve name' -out 'outfile'
-* Example
+```
+openssl ecparam -genkey -name 'curve name' -out 'outfile'
+```
+**Example**
 ```bash
 openssl ecparam -genkey -name prime256v1 -out ecprivkey.pem
 ```
-* Example - Encrypt private key 
+**Example - Encrypt private key**
 ```bash
 openssl ec -aes-128-cbc -in ecprivkey.pem -out new_ecprivkey.pem
 # man enc 참고
 ```
 
-## Public key 생성
-> openssl ec -in 'infile' -pubout -out 'outfile'
+# Genrate Public key
+* Required private key.
+```
+openssl ec -in 'infile' -pubout -out 'outfile'
+```
 * `'infile'` : private key 파일
 * `-pubout` : `'infile'`에 대응하는 공개 키 출력
-* Example
+**Example**
 ```bash
 openssl ec -in ecprivkey.pem -pubout -out ecpubkey.pem
 ```
 
-## ecparam 옵션
-* `man ecparam` 참고
+# ecparam 옵션
+`man ecparam` 참고
 ```bash
 ecparam [options] <infile> outfile
 where options are
@@ -56,8 +58,8 @@ where options are
  -engine e         use engine e, possibly a hardware device
 ```
 
-## ec 옵션
-* `man ec` 참고
+# ec 옵션
+`man ec` 참고
 ```bash
 ec [options] <infile> outfile
 where options are

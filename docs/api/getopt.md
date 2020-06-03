@@ -1,39 +1,4 @@
-<!-- TITLE: Data Type -->
-<!-- SUBTITLE: Data types for C -->
-
-# Primitive System Data Type
-
-* 소프트웨어의 이식성을 위해 사용자 정의 자료형(정수 자료형)을 사용.
-* 플랫폼(platform)마다 자료형(data type)의 크기가 다를 수있음.
-  **e.g.** C언어의 기본 자료형 중 `long` 타입은 32-bit Linux gcc 컴파일러에서 **4 bytes**(32-bit), 64-bit Linux gcc 컴파일러에서 **8 bytes**(64-bit).
-* 정수 비트 길이와 바이트 길이가 문제가 될 때, `char` 또는 `short`, `int`, `long`, `long long`과 같은 자료형 대신 고정 길이 자료형을 이용. [1]
-* **ISO**가 개발한 C 언어 표준 **ISO/IEC 9899**에서는 `char` 또는 `short`, `int`, `long`, `long long`같은 자료형의 길이(비트 길이)에 대한 처리 시스템마다 정의하는 것이 허용되며, 이것은 이식성 문제를 일으킴. [1]
-* 1999년에 개정된 **ISO/IEC 9899: 1999**에서도 이 문제의 잠재적인 원인은 해결되지 않았지만, 비트 길이를 고유하게 정의한 자료형이 추가. 이 형식은 `stdint.h`에 정의. [1]
-
-* `# include <stdint.h>`
-* [u]intN_t : 요구되는 bit의 길이를 N에 명시하여 사용하며, u는 unsigned.
-* 이러한 방식은 C99 표준에 정의.
-* Exact-width integer types.
-  * Integer types having exactly the specified width
-```c
-typedef singed char int8_t;                // signed 8-bit integer
-typedef unsigned char uint8_t;             // unsigned 8-bit integer
-typedef singed int int16_t;                // signed 16-bit integer
-typedef unsigned int uint16_t;             // unsigned 16-bit integer
-typedef singed long int int32_t;           // signed 32-bit integer
-typedef unsigned long int uint32_t;        // unsigned 32-bit integer
-typedef singed long long int int64_t;      // signed 64-bit integer
-typedef unsigned long long int  uint64_t;  // unsigned 64-bit integer
-```
-
-Reference
-=====
-[1] http://blog.daum.net/_blog/BlogTypeView.do?blogid=09ehJ&articleno=18230429&categoryId=884391&regdt=20100414204400 
-[2] http://mgoons.tistory.com/4<!-- TITLE: getopt() -->
-<!-- SUBTITLE: getopt(), getopt_long(), getopt_long_only() 사용법 -->
-
-# About getopt()
-
+# About getopt()?
 * 실행 명령(execution command)의 인자(arguments) 파싱(parsing)를 도와주는 함수
 * 각 인자들은 일반적으로 공백 '` `'과 single/double quotation mark `'` ,`"`로 구분
 * C/C++ 소스 코드의 `main(int argc, char *argv[])`의 parameter로 사용
@@ -56,7 +21,7 @@ main(int argc, char *argv[])
 - 이런 형식의 옵션 인자를 처리하기 위한 라이브러리 함수로 `getopt()` 사용. (`-`로 시작하는 문자 옵션; **short option**)
 - GNU extension으로 `getopt_long()`, `getopt_long_only()` 사용. (`--`로 시작하는 문자열 옵션; **long option**)
 
-## man getopt
+**man getopt**
 ```bash
 man 3 getopt
 ```
@@ -91,7 +56,7 @@ SYNOPSIS
        getopt_long(), getopt_long_only(): _GNU_SOURCE
 ```
 
-## 외부 전역 변수
+# Global variables
 * `optarg` : 해당 옵션의 추가적인 인자(문자열).
 * `optind` : 현재 argv를 가리키는 index, 1부터 시작.
 * `opterr` : getopt()의 에러 출력 flag, opterr=1이면 출력, 0이면 출력 안함. 
@@ -147,7 +112,7 @@ while((c=getopt(argc, argv, "hvf:"))==-1)
   }
 }
 ```
-## Example - getopt_example.c
+* Example - getopt_example.c
 ```c
 /* getopt_example.c */
 #include <stdio.h>
@@ -196,7 +161,7 @@ void main(int argc, char* const *argv)
 		printf("option 'f' : %s\n", farg);
 }
 ```
-## 실행 결과 - getopt_example.c
+    * 실행 결과 - getopt_example.c
 ```bash
 $ ./a.out -hf abc -v
 option 'h'
@@ -241,7 +206,7 @@ struct option {
    1. 해당하는 옵션이라며, val를 리턴하고, 추가 인자가 필요한 옵션은 `optarg`에 추가 인자가 저장.
    2. `flag`가 지정된 옵션이 매칭하면 `0`을 리턴하고, `flag`가 지정한 변수에 `val`을 저장.
 
-## Example - getopt_long_example.c
+* Example - getopt_long_example.c
 ```c
 /* getopt_long_example.c */
 #include <stdio.h>
@@ -311,7 +276,7 @@ void main(int argc, char* const *argv)
 		printf("optional argument is \"%s\".\n", arg);
 }
 ```
-## 실행 결과 - getopt_long_example.c
+    * 실행 결과 - getopt_long_example.c
 ```bash
 $ ./a.out --debug -vh --print Hello
 DEBUG!!!
@@ -324,7 +289,7 @@ optional argument is "Hello".
 $ 
 ```
 
-# getopt_long_only
+# getopt_long()
 ```c
 int getopt_long_only(int argc, char * const argv[], const char *optstring, const struct option *longopts, int *longindex);
 ```
@@ -335,7 +300,7 @@ int getopt_long_only(int argc, char * const argv[], const char *optstring, const
 * **long option**만 사용할거라면, `optstring`을 `""`(double quotation mark pair)로 지정. 
   * `""`은 NULL이 아닌 **empty-string**.
 
-## Example - getopt_long_only_example.c
+* Example - getopt_long_only_example.c
 ```c
 /* getopt_long_only_example.c */
 #include <stdio.h>
@@ -405,7 +370,7 @@ void main(int argc, char* const *argv)
 		printf("optional argument is \"%s\".\n", arg);
 }
 ```
-## 실행 결과 - getopt_long_only_example.c
+    * 실행 결과 - getopt_long_only_example.c
 ```bash
 $ ./a.out -debug -version --help -print=Hello
 DEBUG!!!
@@ -418,10 +383,11 @@ optional argument is "Hello".
 $ 
 ```
 
-# 추가사항
-`getsubopt()` : `getopt()`, `getopt_long()`으로 파싱된 인자에서 토큰을 기준으로 문자열을 파싱.
+# Misc.
+* `getsubopt()` : `getopt()`, `getopt_long()`으로 파싱된 인자에서 토큰을 기준으로 문자열을 파싱.
+* My skeleton code is [here](https://gist.github.com/jgseong/35116de2bcd736412f584786cf268df9).
 
-References
-=====
-[1] http://www.joinc.co.kr/w/man/3/getopt 
-[2] http://soooprmx.com/wp/archives/4993 
+_References_
+
+1. [Joinc getopt](http://www.joinc.co.kr/w/man/3/getopt)
+2. [Wireframe's post](http://soooprmx.com/wp/archives/4993)
