@@ -145,6 +145,9 @@
     <li class="toctree-l3"><a href="#disable">자동개행문자 삽입 disable</a></li>
     
 
+    <li class="toctree-l3"><a href="#change-colorschems-for-vimdiff">Change colorschems for vimdiff</a></li>
+    
+
     </ul>
                 </li>
     </ul>
@@ -213,6 +216,47 @@
 set binary
 set noeol
 </code></pre>
+
+<h1 id="change-colorschems-for-vimdiff">Change colorschems for vimdiff</h1>
+<ul>
+<li>refer to [1]</li>
+<li>vimdiff recommended colorscheme:<ul>
+<li><a href="https://github.com/romainl/Apprentice">apprentice</a></li>
+</ul>
+</li>
+<li>download the colorscheme(.vim) file, and copy file to <code>~/.vim/colors/</code></li>
+</ul>
+<pre><code class="bash"># e.g.
+curl -O https://github.com/romainl/Apprentice/releases/download/v1.9/Apprentice-1.9.zip
+unzip Apprentice-1.9 &amp;&amp; cp colors/apprentice.vim ~/.vim/colors
+</code></pre>
+
+<ul>
+<li>edit <code>~/.vimrc</code></li>
+</ul>
+<pre><code class="vim">&quot; ...
+&quot; if vimdiff
+if &amp;diff
+  colorscheme apprentice
+endif
+&quot; ...
+</code></pre>
+
+<ul>
+<li>Simple colorscheme </li>
+</ul>
+<pre><code class="bash">vim ~/.vim/colors/diffcolors.vim
+</code></pre>
+
+<pre><code class="vim">&quot; diffcolors.vim
+hi DiffAdd         ctermbg=black       ctermfg=green       cterm=reverse
+hi DiffChange      ctermbg=black       ctermfg=magenta     cterm=reverse                       
+hi DiffDelete      ctermbg=black       ctermfg=darkred     cterm=reverse                       
+hi DiffText        ctermbg=black       ctermfg=red         cterm=reverse         
+</code></pre>
+
+<p><em>Reference</em></p>
+<p>[1] <a href="https://astrocoke.tistory.com/7">Astro Coke</a></p>
               
             </div>
           </div>
