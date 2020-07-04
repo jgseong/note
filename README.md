@@ -1,5 +1,5 @@
 # note
 
-Repository of Jgseong's note.
+Repository for Jgseong's note.
 
-Powered by MkDocs
+Deployed by github-page powered by MkDocs
