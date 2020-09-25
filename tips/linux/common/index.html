@@ -158,6 +158,9 @@
     <li class="toctree-l3"><a href="#wireshark">사용자 계정으로 wireshark 실행</a></li>
     
 
+    <li class="toctree-l3"><a href="#apt-error-and-solution">APT error and solution</a></li>
+    
+
     </ul>
                 </li>
                 <li class="">
@@ -485,6 +488,22 @@ ls /usr/bin/dumpcap  -l   # or 'ls -l $(which dumpcap)'
 -rwxr-xr-- 1 root wireshark 96464 Jun  1  2017 /usr/bin/dumpcap* 
 sudo usermod -a -G wireshark $USER 
 reboot # or logout/re-login
+</code></pre>
+
+<h1 id="apt-error-and-solution">APT error and solution</h1>
+<ol>
+<li>apt update 경고 #1</li>
+<li>W: Problem unlinking the file auxfiles - Clean (21: Is a directory)</li>
+<li>error:</li>
+</ol>
+<pre><code>W: Problem unlinking the file auxfiles - Clean (21: Is a directory)
+</code></pre>
+
+<ul>
+<li>solution</li>
+</ul>
+<pre><code>rm -rf /var/lib/apt/lists/*
+sudo apt update
 </code></pre>
               
             </div>
