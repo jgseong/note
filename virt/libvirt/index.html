@@ -7,23 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
-  <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>Install Libvirt - Jgseong's Note</title>
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Libvirt - Jgseong's Note</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Install Libvirt";
-    var mkdocs_page_input_path = "tips/linux/libvirt.md";
+    var mkdocs_page_name = "Libvirt";
+    var mkdocs_page_input_path = "virt/libvirt.md";
     var mkdocs_page_url = null;
   </script>
   
-  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
-  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
@@ -36,9 +36,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="../../.." class="icon icon-home"> Jgseong's Note</a>
+        <a href="../.." class="icon icon-home"> Jgseong's Note</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
@@ -50,7 +50,7 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="../../..">Home</a>
+    <a class="" href="../..">Home</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -59,11 +59,11 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../api/theory/">Theory</a>
+    <a class="" href="../../api/theory/">Theory</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../api/getopt/">getopt</a>
+    <a class="" href="../../api/getopt/">getopt</a>
                 </li>
     </ul>
 	    </li>
@@ -74,7 +74,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../tools/tmux/">tmux</a>
+    <a class="" href="../../tools/tmux/">tmux</a>
                 </li>
     </ul>
 	    </li>
@@ -85,11 +85,21 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../virt/docker/">Docker</a>
+    <a class="" href="../docker/">Docker</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../virt/qemu/">Qemu</a>
+    <a class="" href="../qemu/">Qemu</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Libvirt</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#install-libvirt">Install Libvirt</a></li>
+    
+
+    </ul>
                 </li>
     </ul>
 	    </li>
@@ -100,27 +110,27 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../../openssl/cli/digest/">CLI/Digest</a>
+    <a class="" href="../../openssl/cli/digest/">CLI/Digest</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../openssl/cli/enc/">CLI/enc</a>
+    <a class="" href="../../openssl/cli/enc/">CLI/enc</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../openssl/cli/ec/">CLI/ec</a>
+    <a class="" href="../../openssl/cli/ec/">CLI/ec</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../openssl/cli/pki/">CLI/PKI</a>
+    <a class="" href="../../openssl/cli/pki/">CLI/PKI</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../openssl/api/evp-digest/">EVP/Digest</a>
+    <a class="" href="../../openssl/api/evp-digest/">EVP/Digest</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../../../openssl/api/evp-sym-cipher/">EVP/Sym-Cipher</a>
+    <a class="" href="../../openssl/api/evp-sym-cipher/">EVP/Sym-Cipher</a>
                 </li>
     </ul>
 	    </li>
@@ -131,15 +141,15 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../common/">Common</a>
+    <a class="" href="../../tips/linux/common/">Common</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../desktop/">Desktop</a>
+    <a class="" href="../../tips/linux/desktop/">Desktop</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="../vim/">Vim</a>
+    <a class="" href="../../tips/linux/vim/">Vim</a>
                 </li>
     </ul>
 	    </li>
@@ -150,7 +160,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../windows/common/">Common</a>
+    <a class="" href="../../tips/windows/common/">Common</a>
                 </li>
     </ul>
 	    </li>
@@ -165,7 +175,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../..">Jgseong's Note</a>
+        <a href="../..">Jgseong's Note</a>
       </nav>
 
       
@@ -173,11 +183,15 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../../..">Docs</a> &raquo;</li>
+    <li><a href="../..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Virt. &raquo;</li>
+        
+      
     
-    <li>Install Libvirt</li>
+    <li>Libvirt</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -215,6 +229,15 @@ sudo adduser ${USER} libvirt-qemu
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../openssl/cli/digest/" class="btn btn-neutral float-right" title="CLI/Digest">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../qemu/" class="btn btn-neutral" title="Qemu"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
@@ -237,12 +260,16 @@ sudo adduser ${USER} libvirt-qemu
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../qemu/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../openssl/cli/digest/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
-    <script>var base_url = '../../..';</script>
-    <script src="../../../js/theme.js" defer></script>
-      <script src="../../../search/main.js" defer></script>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
 
 </body>
 </html>
