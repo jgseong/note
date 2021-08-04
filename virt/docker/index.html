@@ -105,15 +105,17 @@
     <li class="toctree-l3"><a href="#basic-commands">Basic Commands</a></li>
     
 
+    <li class="toctree-l3"><a href="#failed-to-login-dockerhub">Failed to login dockerhub</a></li>
+    
+
+    <li class="toctree-l3"><a href="#push-image-to-dockerhub">Push image to dockerhub</a></li>
+    
+
     </ul>
                 </li>
                 <li class="">
                     
     <a class="" href="../qemu/">Qemu</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../libvirt/">Libvirt</a>
                 </li>
     </ul>
 	    </li>
@@ -164,6 +166,10 @@
                 <li class="">
                     
     <a class="" href="../../tips/linux/vim/">Vim</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../tips/linux/mxlinux/">MxLinux</a>
                 </li>
     </ul>
 	    </li>
@@ -331,6 +337,21 @@ docker run -d -p 8080:80 --name webserver nginx
 <li>delete image</li>
 </ul>
 <pre><code class="sh">docker rmi 'container name'
+</code></pre>
+
+<h1 id="failed-to-login-dockerhub">Failed to login dockerhub</h1>
+<p>set <code>"credsStore": ""</code> in <code>~/.docker/config.json</code></p>
+<h1 id="push-image-to-dockerhub">Push image to dockerhub</h1>
+<ol>
+<li><code>docker login</code></li>
+<li>create repository on <a href="https://hub.docker.com/repositories">hub.docker.com</a></li>
+<li>make tag</li>
+</ol>
+<pre><code># make tag
+docker tag ${local-img}:{local-tag} ${new-repo}:{new-tag}
+
+# push image to repository
+docker push ${new-repo}:{new-tag}
 </code></pre>
               
             </div>
