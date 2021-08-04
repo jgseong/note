@@ -98,4 +98,18 @@ docker rm [options] 'container name'
 docker rmi 'container name'
 ```
 
+# Failed to login dockerhub
+set `"credsStore": ""` in `~/.docker/config.json`
+
+# Push image to dockerhub
+1. `docker login`
+2. create repository on [hub.docker.com](https://hub.docker.com/repositories)
+3. make tag
+```
+# make tag
+docker tag ${local-img}:{local-tag} ${new-repo}:{new-tag}
+
+# push image to repository
+docker push ${new-repo}:{new-tag}
+```
 

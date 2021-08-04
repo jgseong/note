@@ -21,6 +21,7 @@ nav:
     - 'Common': 'tips/linux/common.md'
     - 'Desktop': 'tips/linux/desktop.md'
     - 'Vim': 'tips/linux/vim.md'
+    - 'MxLinux': 'tips/linux/mxlinux.md'
   - 'Tip/Windows' : 
     - 'Common': 'tips/windows/common.md'
 
