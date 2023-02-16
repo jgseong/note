@@ -67,4 +67,20 @@ DiskPart 마치는 중...
 
 [winlogo]: https://www.tenforums.com/images/smilies/start.png
 
+# Windows Hyper-V: 우분투 고급 세션 연결 시 검은 화면
 
+1. 게스트OS (우분투) 터미널:
+```sh
+sudo vim /etc/xrdp/startwm.sh
+```
+2. 아래 내용 추가
+  - `test -x /etc/X11/XSession && /etc/X11/XSesseion` 이전 영역에 작성
+```sh
+unset DBUS_SESSION_BUS_ADDRESS 
+unset XDG_RUNTIME_DIR 
+. $HOME/.profile
+```
+3. xrdp 서비스 재시작
+```
+sudo systemctl restart xrdp
+```
